@@ -36,10 +36,12 @@ def authorization(request):
     client = Client(access_token=access_token)
     athlete = client.get_athlete() # Get current athlete details
     
+    """
     # saving access_token as pickle for use in other views    
     outputFile = open("stravaChimp/tokens/"+str(athlete.id)+"token.txt", 'w')
     pickle.dump(access_token, outputFile)
     outputFile.close()   
+    """
     
     # updating dataframe, pickling for use in other views
     global df
