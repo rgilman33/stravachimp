@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>run detail</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+	<script src="http://maps.google.com/maps/api/js?sensor=true"></script> 
+	<style type="text/css">
+        html, body, #map {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        .stations, .stations svg {
+          position: absolute;
+        }
+        .stations svg {
+          width: 60px;
+          height: 20px;
+          padding-right: 100px;
+          font: 10px sans-serif;
+        }
+        .stations circle {
+          fill: brown;
+          stroke: black;
+          stroke-width: 1.5px;}
+	   /* .sidebyside {
+		    display: inline-block;
+		    width: 49%;
+	    }*/
+	    
+	    .axis path,
+        .axis line {
+          fill: none;
+          stroke: #000;
+          shape-rendering: crispEdges;
+        }
+
+        .tick line{
+            opacity: 0.1;
+          }
+		
+		.point {fill:black;
+		        stroke:black;
+		        stroke-opacity: .5}
+		.point.highlight {fill:red}
+		#tooltip {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 10;
+			margin: 0;
+			padding: 10px;
+			width: 15px;
+			height: 12px;
+			color: black;
+			font-family: sans-serif;
+			font-size: 12px;
+			font-weight: bold;
+			text-align: center;
+			background-color: rgba(0, 0, 0, 0.0);
+			opacity: 0;
+			pointer-events: none;
+		}
+	</style>
+</head>
+<body>
+
+<div id="tooltip">
+</div>
+
+<div id="buttonContainer">
+	<button id="reset">reset</button>
+</div>
+
+<div class="sidebyside" id="map" style='height:800px;width:800px;'></div>	
+
+<div id="container1"><h1>hr time</h1>
+</div>
+
+<div id="container2"><h1>speed time</h1>
+</div>
+
+<div class="sidebyside" id="container3"><h1>speed hr explorer</h1>
+</div>
+	
+
+
+</body>
+
+
+<script type="text/javascript">
+/*
+var data = 
+[{"latlng":[38.91571,-77.042717],"hr":131.0,"speeds":3.75,"speedDelta3Abs":0.65,"altDeltas":-0.4,"time":4120.0,"distCum":11105.6},{"latlng":[38.915707,-77.042445],"hr":133.0,"speeds":3.95,"speedDelta3Abs":0.1,"altDeltas":-0.4,"time":4126.0,"distCum":11129.3},{"latlng":[38.915702,-77.042289],"hr":136.0,"speeds":4.5,"speedDelta3Abs":1.0333333333,"altDeltas":-0.5,"time":4129.0,"distCum":11142.8},{"latlng":[38.9157,-77.042162],"hr":140.0,"speeds":3.6666666667,"speedDelta3Abs":-0.0833333333,"altDeltas":-0.2,"time":4132.0,"distCum":11153.8},{"latlng":[38.91571,-77.041927],"hr":141.0,"speeds":3.4,"speedDelta3Abs":-0.55,"altDeltas":-0.5,"time":4138.0,"distCum":11174.2},{"latlng":[38.915702,-77.04169],"hr":141.0,"speeds":2.9428571429,"speedDelta3Abs":-1.5571428571,"altDeltas":-0.5,"time":4145.0,"distCum":11194.8},{"latlng":[38.915638,-77.041461],"hr":141.0,"speeds":3.5333333333,"speedDelta3Abs":-0.1333333333,"altDeltas":0.3,"time":4151.0,"distCum":11216.0},{"latlng":[38.915571,-77.041213],"hr":139.0,"speeds":3.7833333333,"speedDelta3Abs":0.3833333333,"altDeltas":-1.0,"time":4157.0,"distCum":11238.7},{"latlng":[38.915566,-77.040979],"hr":139.0,"speeds":3.3833333333,"speedDelta3Abs":0.4404761905,"altDeltas":-0.1,"time":4163.0,"distCum":11259.0},{"latlng":[38.915552,-77.04087],"hr":139.0,"speeds":3.2,"speedDelta3Abs":-0.3333333333,"altDeltas":-0.1,"time":4166.0,"distCum":11268.6},{"latlng":[38.915557,-77.040636],"hr":139.0,"speeds":3.3833333333,"speedDelta3Abs":-0.4,"altDeltas":-0.2,"time":4172.0,"distCum":11288.9},{"latlng":[38.915577,-77.040379],"hr":141.0,"speeds":3.7166666667,"speedDelta3Abs":0.3333333333,"altDeltas":-0.2,"time":4178.0,"distCum":11311.2},{"latlng":[38.915594,-77.040131],"hr":141.0,"speeds":3.5833333333,"speedDelta3Abs":0.3833333333,"altDeltas":-0.2,"time":4184.0,"distCum":11332.7},{"latlng":[38.915605,-77.039894],"hr":141.0,"speeds":3.4166666667,"speedDelta3Abs":0.0333333333,"altDeltas":0.0,"time":4190.0,"distCum":11353.2},{"latlng":[38.91561,-77.039637],"hr":141.0,"speeds":3.7166666667,"speedDelta3Abs":-0.0,"altDeltas":-0.2,"time":4196.0,"distCum":11375.5},{"latlng":[38.915628,-77.03951],"hr":144.0,"speeds":3.7,"speedDelta3Abs":0.1166666667,"altDeltas":0.0,"time":4199.0,"distCum":11386.6},{"latlng":[38.915656,-77.039275],"hr":145.0,"speeds":4.1,"speedDelta3Abs":0.6833333333,"altDeltas":-0.3,"time":4204.0,"distCum":11407.1},{"latlng":[38.915672,-77.039005],"hr":143.0,"speeds":3.9166666667,"speedDelta3Abs":0.2,"altDeltas":0.2,"time":4210.0,"distCum":11430.6},{"latlng":[38.915659,-77.03875],"hr":144.0,"speeds":3.7,"speedDelta3Abs":-0.0,"altDeltas":-0.3,"time":4216.0,"distCum":11452.8},{"latlng":[38.915636,-77.038607],"hr":142.0,"speeds":3.15,"speedDelta3Abs":-0.95,"altDeltas":-0.6,"time":4220.0,"distCum":11465.4},{"latlng":[38.915518,-77.038448],"hr":143.0,"speeds":3.3833333333,"speedDelta3Abs":-0.5333333333,"altDeltas":0.1,"time":4226.0,"distCum":11485.7},{"latlng":[38.915486,-77.038429],"hr":142.0,"speeds":3.9,"speedDelta3Abs":0.2,"altDeltas":-0.2,"time":4227.0,"distCum":11489.6},{"latlng":[38.915451,-77.038426],"hr":143.0,"speeds":3.8,"speedDelta3Abs":0.65,"altDeltas":0.0,"time":4228.0,"distCum":11493.4},{"latlng":[38.915261,-77.038408],"hr":142.0,"speeds":4.24,"speedDelta3Abs":0.8566666667,"altDeltas":-0.1,"time":4233.0,"distCum":11514.6},{"latlng":[38.91507,-77.038359],"hr":144.0,"speeds":3.5833333333,"speedDelta3Abs":-0.3166666667,"altDeltas":0.0,"time":4239.0,"distCum":11536.1},{"latlng":[38.915047,-77.038339],"hr":144.0,"speeds":3.0,"speedDelta3Abs":-0.8,"altDeltas":0.0,"time":4240.0,"distCum":11539.1},{"latlng":[38.91498,-77.038262],"hr":142.0,"speeds":2.525,"speedDelta3Abs":-1.715,"altDeltas":-0.1,"time":4244.0,"distCum":11549.2},{"latlng":[38.914953,-77.038179],"hr":141.0,"speeds":1.3142857143,"speedDelta3Abs":-2.269047619,"altDeltas":0.2,"time":4251.0,"distCum":11558.4},{"latlng":[38.91492,-77.038065],"hr":142.0,"speeds":2.65,"speedDelta3Abs":-0.35,"altDeltas":0.6,"time":4255.0,"distCum":11569.0},{"latlng":[38.914904,-77.037816],"hr":142.0,"speeds":3.5833333333,"speedDelta3Abs":1.0583333333,"altDeltas":-0.7,"time":4261.0,"distCum":11590.5},{"latlng":[38.914914,-77.037705],"hr":142.0,"speeds":3.2333333333,"speedDelta3Abs":1.919047619,"altDeltas":0.4,"time":4264.0,"distCum":11600.2},{"latlng":[38.914913,-77.037653],"hr":143.0,"speeds":2.2,"speedDelta3Abs":-0.45,"altDeltas":0.1,"time":4266.0,"distCum":11604.6},{"latlng":[38.914919,-77.037379],"hr":141.0,"speeds":3.4,"speedDelta3Abs":-0.1833333333,"altDeltas":-0.1,"time":4273.0,"distCum":11628.4},{"latlng":[38.914912,-77.03725],"hr":141.0,"speeds":2.22,"speedDelta3Abs":-1.0133333333,"altDeltas":-0.2,"time":4278.0,"distCum":11639.5},{"latlng":[38.9149,-77.037249],"hr":138.0,"speeds":0.5307692308,"speedDelta3Abs":-1.6692307692,"altDeltas":0.1,"time":4291.0,"distCum":11646.4},{"latlng":[38.914877,-77.037376],"hr":136.0,"speeds":0.63125,"speedDelta3Abs":-2.76875,"altDeltas":0.2,"time":4307.0,"distCum":11656.5},{"latlng":[38.91487,-77.037434],"hr":132.0,"speeds":0.625,"speedDelta3Abs":-1.595,"altDeltas":-0.1,"time":4315.0,"distCum":11661.5},{"latlng":[38.914867,-77.037448],"hr":129.0,"speeds":0.5,"speedDelta3Abs":-0.0307692308,"altDeltas":0.0,"time":4319.0,"distCum":11663.5},{"latlng":[38.914865,-77.037462],"hr":126.0,"speeds":0.2,"speedDelta3Abs":-0.43125,"altDeltas":-0.1,"time":4322.0,"distCum":11664.1},{"latlng":[38.914879,-77.037444],"hr":123.0,"speeds":0.2142857143,"speedDelta3Abs":-0.4107142857,"altDeltas":0.1,"time":4336.0,"distCum":11667.1},{"latlng":[38.914874,-77.037442],"hr":122.0,"speeds":0.1,"speedDelta3Abs":-0.4,"altDeltas":0.0,"time":4341.0,"distCum":11667.6}];
+*/
+{% block content %}
+var data = JSON.parse('{{ r_json | escapejs }}');
+{% endblock %}
+////////////////////////////////////////
+//
+//       hr-time   and    speed-time
+
+var margin = {top: 20, right: 10, bottom: 20, left: 10},
+    w = 960 - margin.left - margin.right,
+    h = 250 - margin.top - margin.bottom;
+
+w2 = 400  // hr explorer
+h2 = 400
+
+pad = 25
+
+var svg = d3.select("#container1")
+			.append("svg")
+			    .attr("width", w + margin.left + margin.right)
+                .attr("height", h + margin.top + margin.bottom)
+            .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");;
+    
+var svg2 = d3.select("#container2")
+			.append("svg")
+			.attr("width", w)
+			.attr("height", h);
+			
+var svg3 = d3.select("#container3")
+			.append("svg")
+			.attr("width", w2)
+			.attr("height", h2);		
+
+var oExtent = [d3.min(data, function(d) {return d.time}), d3.max(data, function(d) {return d.time})]
+	
+// x axis, scale creation (speed-time and hr-time graphs)
+timeScale = d3.scale.linear()
+            .domain(oExtent)
+            .range([pad, w - pad]);            
+timeAxis = d3.svg.axis()
+            .scale(timeScale)
+            .orient("bottom");          
+svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + h + ")")
+            .call(timeAxis);
+svg2.append("g")
+            .attr("class", "x axis")
+            //.attr("transform", "translate(" + pad + ",0)")
+            .attr("transform", "translate(0," + (h-pad)+ ")")
+            .call(timeAxis);  
+                        
+   
+// y axis (hr) axis, scale creation     
+hrScale = d3.scale.linear()
+            .domain([d3.min(data, function(d) {return d.hr}), d3.max(data, function(d) {return d.hr})])
+            .range([h-pad, pad]);            
+hrAxis = d3.svg.axis()
+            .scale(hrScale)
+            .innerTickSize(-w)
+            .orient("left")
+            .ticks(10);            
+svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate("+margin.top+",0)")
+    .call(hrAxis);
+            
+            
+// y axis (speed) axis, scale creation
+speedScale = d3.scale.linear()
+            .domain([d3.min(data, function(d) {return d.speeds}), d3.max(data, function(d) {return d.speeds})])
+            .range([h-pad, pad]);            
+speedAxis = d3.svg.axis()
+            .scale(speedScale)
+            .innerTickSize(-w)
+            .orient("left")
+            .ticks(10);            
+svg2.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate("+pad+",0)")
+    .call(speedAxis);
+    
+// y axis (hr explorer) axis, scale creation     
+hrScale2 = d3.scale.linear()
+            .domain([d3.min(data, function(d) {return d.hr}), d3.max(data, function(d) {return d.hr})])
+            .range([h2-pad, pad]);            
+hrAxis2 = d3.svg.axis()
+            .scale(hrScale2)
+            .orient("left")
+            .ticks(10);            
+svg3.append("g")
+    .attr("class", "axis")
+    .attr("transform", "translate("+pad+",0)")
+    .call(hrAxis2);  
+    
+// x axis (hr explorer) axis, scale creation
+speedScale2 = d3.scale.linear()
+            .domain([d3.min(data, function(d) {return d.speeds}), d3.max(data, function(d) {return d.speeds})])
+            .range([pad, w2 - pad]);            
+speedAxis2 = d3.svg.axis()
+            .scale(speedScale2)
+            .orient("bottom");          
+svg3.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + (h2-pad)+ ")")
+            .call(speedAxis2);
+ 
+    
+    
+/////////////////////////////////////////////////////////     
+// adding brush
+// append before pts to allow tooltips to come through
+/////////////////////////////////////////////////////////
+
+var brush = d3.svg.brush()
+    .x(timeScale)
+    .on("brush", brushmove)
+    .on("brushend", redrawChart);
+    
+function brushmove() {
+    var extent = brush.extent();
+    if (extent[1] - extent[0] > 50) {
+        d3.selectAll(".point")       // turning pts inside brush red during highlight
+            .filter(function (d) {
+            if (extent[0] <= d.time && d.time <= extent[1]) {return true}
+            })   
+        .style("fill", "red");     
+        
+        d3.selectAll(".point")       // preparing to disappear pts outside of brush
+            .classed("kill", function (d) {
+            if (extent[0] >= d.time || d.time >= extent[1]) {return true}
+            })     }
+};
+
+function redrawChart() {          // drawing up new graphs, return ptColor
+    extent = brush.extent()
+    
+    if (extent[1] - extent[0] > 50) {  // only brushing when brush width exceeds one-day
+        timeScale.domain(extent); // updating domain to reflect brush
+        svg.selectAll(".point") // returning original color following highlight
+          .data(data)
+          .attr("cx", function(d) { return timeScale(d.time); })
+          .style("fill", ptColor);  
+          
+        svg.select('.x.axis').call(timeAxis);
+        
+        svg2.selectAll(".point")
+          .data(data)
+          .attr("cx", function(d) { return timeScale(d.time); })
+          .style("fill", ptColor); 
+           
+        svg2.select('.x.axis').call(timeAxis); 
+        
+        svg3.selectAll(".point")
+            .style("fill", ptColor);
+            
+        svg3.selectAll(".kill")  // disappearing pts previously classed "kill"
+            .style("fill", "blue")
+            .style("opacity", .1);
+       }
+    d3.selectAll(".brush")      // clearing brush from all graphs
+          .call(brush.clear());   
+    
+}
+svg.append("g")                 // adding brush to svg
+    .attr("class", "brush")
+    .call(brush)
+    .selectAll("rect")
+    .attr("height", h)
+    .style("opacity", .1);
+
+svg2.append("g")                // adding brush to svg2
+    .attr("class", "brush")
+    .call(brush)
+    .selectAll("rect")
+    .attr("height", h)
+    .style("opacity", .1);
+
+d3.select("#reset")             // Resetting to original view
+    .on("click", function() {  
+        brush.extent(oExtent);  // FINALLY IT WORKS       
+        svg.select('.brush')
+        .call(brush);      
+        redrawChart();
+        svg3.selectAll(".point")
+            .style("fill", ptColor)
+            .style("opacity", 1);
+    } );  
+///////////////////////////////////////////////////
+// points
+radius = 3
+ptStrOp = .1
+//function(d) { return d.altDeltas +7 }
+ptColor = function(d) {return color(d.speedDelta3Abs)}
+
+// set color scale here
+var color = d3.scale.linear()
+    .domain([d3.min(data, function(d) {return d.speedDelta3Abs}), 0, d3.max(data, function(d) {return d.speedDelta3Abs})])
+    .range(["red", "yellow", "green"]);
+        
+// making the hr points here
+pts1 = svg.selectAll(".point")
+    .data(data)
+  .enter().append("circle")
+    .attr("class", "point")
+    .attr("clip-path", "url(#clip)")
+    .attr("r", radius)
+    .attr("cx", function(d) { return timeScale(d.time); })
+    .attr("cy", function(d) { return hrScale(d.hr); })
+    .style("fill", ptColor)
+    .style("stroke-opacity", ptStrOp);
+   
+// making the speed points here
+pts2 = svg2.selectAll(".point")
+    .data(data)
+  .enter().append("circle")
+    .attr("class", "point")
+    .attr("clip-path", "url(#clip)")
+    .attr("r", radius)
+    .attr("cx", function(d) { return timeScale(d.time); })
+    .attr("cy", function(d) { return speedScale(d.speeds); })
+    .style("fill", ptColor)
+    .style("stroke-opacity", ptStrOp);
+   
+  
+// making the hr speed explorer points 
+pts3 = svg3.selectAll(".point")
+    .data(data)
+  .enter().append("circle")
+    .attr("class", "point")
+    .attr("clip-path", "url(#clip)")
+    .attr("r", radius)
+    .attr("cx", function(d) { return speedScale2(d.speeds); })
+    .attr("cy", function(d) { return hrScale2(d.hr); })
+    .style("fill", ptColor)  
+
+/////////////////////////////////////////////////////
+// tooltip
+// on mouseover syncing highlights and adding tooltip
+d3.selectAll(".point")
+    .on("mouseover", function(d) {
+        thisTime = d.time
+        d3.selectAll(".point")
+        .filter(function(d) {
+            if (d.time ==thisTime) {return true}
+            })
+            .classed("highlight", true)
+            .style("fill", "red");
+            
+            var x = d3.event.pageX;
+            var y = d3.event.pageY;
+            text = 'altD: '+d.altDeltas+' speed: '+d.speeds+' hr: '+d.hr+' del3: '+d.speedDelta3Abs
+            d3.select("#tooltip")
+				.style("left", x + "px")
+				.style("top", y + "px")
+				.style("opacity", 1)
+				.text(text);
+            })
+                
+    .on("mouseout", function() {
+            d3.selectAll(".point")
+            .classed("highlight", false)
+            .style("fill", ptColor);
+            
+            d3.select("#tooltip")
+                .style("opacity", 0);
+         });
+         
+         
+         
+         
+//////////////////////////////////////////////////////////////////////
+//
+//     Map
+//
+//////////////////////////////////////////////////////////////////////
+
+
+// Create the Google Map…
+var map = new google.maps.Map(d3.select("#map").node(), {
+  //zoom: 5,
+  //center: new google.maps.LatLng(38.915605,-77.039894),
+  mapTypeId: google.maps.MapTypeId.TERRAIN
+});
+
+// finding bounds
+var maxN = d3.max(data, function(d) {return d.latlng[0]});
+var maxE = d3.max(data, function(d) {return d.latlng[1]});
+var maxS = d3.min(data, function(d) {return d.latlng[0]});
+var maxW = d3.min(data, function(d) {return d.latlng[1]});
+var sw = new google.maps.LatLng(maxS, maxW);
+var ne = new google.maps.LatLng( maxN, maxE);
+var bounds = new google.maps.LatLngBounds(sw, ne);
+
+map.fitBounds(bounds);
+
+var colorR = d3.scale.linear()  // color scale
+    .domain([80, 190])
+    .range(['blue','red']);
+
+// Load the station data. When the data comes back, create an overlay.
+var overlay = new google.maps.OverlayView();
+// Add the container when the overlay is added to the map.
+overlay.onAdd = function() {
+    var layer = d3.select(this.getPanes().overlayLayer).append("div")
+        .attr("class", "stations");
+    // Draw each marker as a separate SVG element.
+    // We could use a single SVG, but what size would it have?
+    overlay.draw = function() {
+      var projection = this.getProjection(),
+          padding = 10;
+      var marker = layer.selectAll("svg")
+          .data(d3.entries(data))
+          .each(transform) // update existing markers
+        .enter().append("svg")
+          .each(transform)
+          .attr("class", "point");
+      // Add a circle.
+      marker.append("circle")    // keep these r and fill values synced with pts above
+          .attr("r", radius)
+          //.attr("r", function(d) { return d.value.altDeltas +4 }) // need 'value'
+          .attr("cx", padding)
+          .attr("cy", padding)
+          .style("stroke-opacity", ptStrOp)  // dot opacity
+          .style("fill", function(d) {return colorR(d.value.hr)}); // need 'value'
+      // Add a label.
+      marker.append("text")
+          .attr("x", padding + 7)
+          .attr("y", padding)
+          .attr("dy", ".31em");
+          //.text(function(d) { return d.value.hr; });
+      function transform(d) {
+        d = new google.maps.LatLng(d.value.latlng[0], d.value.latlng[1]);
+        d = projection.fromLatLngToDivPixel(d);
+        return d3.select(this)
+            .style("left", (d.x - padding) + "px")
+            .style("top", (d.y - padding) + "px");
+             }
+    };
+};
+// Bind our overlay to the map…
+overlay.setMap(map);
+
+
+
+</script>
+	
+	
+</html>
+
+

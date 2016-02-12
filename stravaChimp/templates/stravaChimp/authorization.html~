@@ -1,0 +1,11 @@
+<html>
+    <head>
+        <title>You've registered</title>
+    </head>
+    <body>
+    
+    <p>you successfully registered w strava. get ready for some rad shit</p>
+    <a href="/dashboard/">dashboard</a>
+
+    </body>
+</html>
