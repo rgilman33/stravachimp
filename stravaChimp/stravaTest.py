@@ -1,6 +1,6 @@
 from stravalib import Client
 import webbrowser, pickle
-import urllib3.contrib.pyopenssl
+#import urllib3.contrib.pyopenssl
 from urllib2 import urlopen
 from json import load, dumps
 import thresher
@@ -9,7 +9,7 @@ import datetime
 from pandas import DataFrame, pivot_table
 import numpy as np
 
-urllib3.contrib.pyopenssl.inject_into_urllib3()
+#urllib3.contrib.pyopenssl.inject_into_urllib3()
 
 ACCESS_TOKEN = '1a253e9fdc49c806f1c052d791b7e26ebeb04a8b'
 

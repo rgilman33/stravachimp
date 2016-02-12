@@ -105,8 +105,6 @@ def dashboard(request):
     return render(request, 'stravaChimp/dashboard.html', {'summaryDf_json':summaryDf_json, 'rollingDf_json':rollingDf_json, 'recovery_json':recovery_json, 'easy_json':easy_json, 'stamina_json':stamina_json, 'impulse_json':impulse_json, 'rollRec_json':rollRec_json, 'rollEasy_json':rollEasy_json, 'rollStam_json':rollStam_json, 'rollImp_json':rollImp_json})
 
 def run_detail(request, pk):
-    
-    
 
     r = df[df.activityId == int(pk)].loc[:,['latlng', 'hr', 'speeds', 'speedDelta3Abs', 'altDeltas', 'time', 'distCum']]
     r_json = r.to_json(orient="records")

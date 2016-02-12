@@ -82,6 +82,7 @@ def assemble(date, activityId, hrList, distanceList, timeList, altitudeList, lat
 # takes in client and outputs master df with all activities appended end to end. It checks to see which activities have already been uploaded, only appending new entries
 def masterAssemble(client):
     activities = list(client.get_activities())
+    print(len(activities))
     athlete = client.get_athlete()
     # add in name of run
 
@@ -126,7 +127,7 @@ def getSummaryDf(df):
         date = datetime.datetime(dateTime.year, dateTime.month, dateTime.day)
         variation = np.round(getHrVar(run), 0)
         avgHr = np.round(getHrAvg(run), 0)    
-        activityId = run.activityId    
+        activityId = run.activityId[0]
         summary = DataFrame({'date':date,'activityId':activityId, 'avgHr':avgHr,'realMiles':realMiles, 'totalDist':totalDist, 'totalTime':totalTime, 'variation': variation, 'recovery':recovery, 'climb':climb, 'impulse':getImpulse(run), 'stamina':getStamina(run), 'easy':getEasy(run), 'recovery':getRecovery(run)}, index=[date])
         summaryDf = summaryDf.append(summary)
         

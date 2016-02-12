@@ -7,8 +7,8 @@ from django.http import HttpRequest
 import pickle, pandas
 from pandas import DataFrame, Series
 from stravalib import Client
-import urllib3.contrib.pyopenssl
-urllib3.contrib.pyopenssl.inject_into_urllib3()
+#import urllib3.contrib.pyopenssl
+#urllib3.contrib.pyopenssl.inject_into_urllib3()
 import thresher
 
 client = Client()

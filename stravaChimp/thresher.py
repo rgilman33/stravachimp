@@ -82,6 +82,7 @@ def assemble(date, activityId, hrList, distanceList, timeList, altitudeList, lat
 # takes in client and outputs master df with all activities appended end to end. It checks to see which activities have already been uploaded, only appending new entries
 def masterAssemble(client):
     activities = list(client.get_activities())
+    print(len(activities))
     athlete = client.get_athlete()
     # add in name of run
 

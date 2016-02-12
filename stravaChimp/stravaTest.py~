@@ -9,7 +9,7 @@ import datetime
 from pandas import DataFrame, pivot_table
 import numpy as np
 
-urllib3.contrib.pyopenssl.inject_into_urllib3()
+#urllib3.contrib.pyopenssl.inject_into_urllib3()
 
 ACCESS_TOKEN = '1a253e9fdc49c806f1c052d791b7e26ebeb04a8b'
 
@@ -43,11 +43,9 @@ inFile = open("master_dfs/"+str(athlete.id)+"masterDf.txt", 'r')
 df = pickle.load(inFile)
 inFile.close()
 
-
-print(df)
-
 r = df[df.activityId == 466777343].loc[:,['latlng', 'hr', 'speeds', 'speedDelta3Abs', 'altDeltas', 'time', 'distCum']]
 r_json = r.to_json(orient="records")
+
 print(r_json)
 """
 
