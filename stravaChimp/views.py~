@@ -18,12 +18,13 @@ MY_STRAVA_CLIENT_ID = "9558"
 MY_STRAVA_CLIENT_SECRET = "734e394ff653703abaef7c7c061cc8d685241a10"
 
 # a url sending visitor to strava's website for authentication
-stravaURL = client.authorization_url(client_id=MY_STRAVA_CLIENT_ID, redirect_uri='http://127.0.0.1:8000/authorization')
+# THIS MUST BE UPDATED FOR WEB USE
+stravaURL = client.authorization_url(client_id=MY_STRAVA_CLIENT_ID, redirect_uri='http://reddlee.pythonanywhere/authorization')
 
 def index(request):
     return render(request, 'stravaChimp/index.html', {'c':stravaURL})
     
-
+#
 # visitors sent to this page after agreeing to allow our site to use their strava
 def authorization(request):
     client = Client()
