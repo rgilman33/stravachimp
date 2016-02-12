@@ -9,7 +9,7 @@ from pandas import DataFrame, Series
 from stravalib import Client
 #import urllib3.contrib.pyopenssl
 #urllib3.contrib.pyopenssl.inject_into_urllib3()
-import thresher
+import thresher, os
 
 client = Client()
 
@@ -18,8 +18,9 @@ MY_STRAVA_CLIENT_ID = "9558"
 MY_STRAVA_CLIENT_SECRET = "734e394ff653703abaef7c7c061cc8d685241a10"
 
 # a url sending visitor to strava's website for authentication
-# THIS MUST BE UPDATED FOR WEB USE
-stravaURL = client.authorization_url(client_id=MY_STRAVA_CLIENT_ID, redirect_uri='http://reddlee.pythonanywhere.com/authorization')
+# THIS MUST BE UPDATED FOR WEB USE, strava website must be updated as well
+#stravaURL = client.authorization_url(client_id=MY_STRAVA_CLIENT_ID, redirect_uri='http://reddlee.pythonanywhere.com/authorization')
+stravaURL = client.authorization_url(client_id=MY_STRAVA_CLIENT_ID, redirect_uri='http://127.0.0.1:8000/authorization')
 
 def index(request):
     return render(request, 'stravaChimp/index.html', {'c':stravaURL})
@@ -42,11 +43,11 @@ def authorization(request):
     pickle.dump(access_token, outputFile)
     outputFile.close()   
     """
-    
+    path = os.path.dirname(__file__)
     # updating dataframe, pickling for use in other views
     global df
     df = thresher.masterAssemble(client) 
-    oFile = open("/home/reddee/stravachimp/stravaChimp/master_dfs/"+str(athlete.id)+"masterDf.txt", 'w')
+    oFile = open(str(path)+"/master_dfs/"+str(athlete.id)+"masterDf.txt", 'w')
     pickle.dump(df, oFile)
     oFile.close() 
     
