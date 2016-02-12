@@ -87,7 +87,7 @@ def masterAssemble(client):
     # add in name of run
 
     # add 'if' statement to account for new users
-    inFile = open("stravaChimp/master_dfs/"+str(athlete.id)+"masterDf.txt", 'r')
+    inFile = open("/home/reddee/stravachimp/stravaChimp/master_dfs/"+str(athlete.id)+"masterDf.txt", 'r')
     df = pickle.load(inFile)
     inFile.close()
 
