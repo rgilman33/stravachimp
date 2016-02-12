@@ -46,7 +46,7 @@ def authorization(request):
     # updating dataframe, pickling for use in other views
     global df
     df = thresher.masterAssemble(client) 
-    oFile = open("stravaChimp/master_dfs/"+str(athlete.id)+"masterDf.txt", 'w')
+    oFile = open("/home/reddee/stravachimp/stravaChimp/master_dfs/"+str(athlete.id)+"masterDf.txt", 'w')
     pickle.dump(df, oFile)
     oFile.close() 
     
