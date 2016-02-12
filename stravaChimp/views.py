@@ -23,7 +23,7 @@ stravaURL = client.authorization_url(client_id=MY_STRAVA_CLIENT_ID, redirect_uri
 def index(request):
     return render(request, 'stravaChimp/index.html', {'c':stravaURL})
     
-
+#
 # visitors sent to this page after agreeing to allow our site to use their strava
 def authorization(request):
     client = Client()
