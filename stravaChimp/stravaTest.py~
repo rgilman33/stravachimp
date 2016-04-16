@@ -149,37 +149,39 @@ def makeFlScat(df, l, speedMeasure):
     fig.clf()
 
 
-for i in range(len(df['date'].unique())):
-#for i in range(5):
+#for i in range(len(df['date'].unique())):
+for i in range(50):
         
-    df = pd.read_pickle("10319226masterDf.txt")
+    try: 
+        df = pd.read_pickle("10319226masterDf.txt")
 
-    df = thresher.basicClean(df)
+        df = thresher.basicClean(df)
 
-    dfi = df[df.date == df['date'].unique()[i]]
+        dfi = df[df.date == df['date'].unique()[i]]
 
-    print str(df['date'].unique()[i])
-    print dfi[['speeds', 'speeds_old']]
+        print str(df['date'].unique()[i])
+        print dfi[['speeds', 'speeds_old']]
 
-    plotScat(dfi, 'hr', 'speeds')
-    plotScat(dfi, 'hr', 'speeds_old')
-        
-    plotSpeedTime(dfi, 'time', 'speeds')
-    plotSpeedTime(dfi, 'time', 'speeds_old')      
-        
-    dfi = thresher.addLws(dfi)
+        plotScat(dfi, 'hr', 'speeds')
+        plotScat(dfi, 'hr', 'speeds_old')
+            
+        plotSpeedTime(dfi, 'time', 'speeds')
+        plotSpeedTime(dfi, 'time', 'speeds_old')      
+            
+        dfi = thresher.addLws(dfi)
 
-    dfi_old = copy.deepcopy(dfi)
+        dfi_old = copy.deepcopy(dfi)
 
-    dfi = getFitlinesLwsDf(dfi, 'speeds')
-    l = makeFlLwsPts(dfi, 'speeds')
-    makeFlScat(dfi, l, 'speeds')
+        dfi = getFitlinesLwsDf(dfi, 'speeds')
+        l = makeFlLwsPts(dfi, 'speeds')
+        makeFlScat(dfi, l, 'speeds')
 
-    dfi_old = getFitlinesLwsDf(dfi_old, 'speeds_old')
-    l_old = makeFlLwsPts(dfi_old, 'speeds_old')
-    makeFlScat(dfi_old, l_old, 'speeds_old')
-    print "\n\n\n\n\n\n\n"
-
+        dfi_old = getFitlinesLwsDf(dfi_old, 'speeds_old')
+        l_old = makeFlLwsPts(dfi_old, 'speeds_old')
+        makeFlScat(dfi_old, l_old, 'speeds_old')
+        print "\n\n\n\n\n\n\n"
+    else:
+        continue
 
 """
 df = df[df.speed_diff < .25]
