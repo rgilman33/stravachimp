@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'stravaChimp',
+    'django.contrib.postgres',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -75,10 +76,23 @@ WSGI_APPLICATION = 'stravaChimp_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+""" #This is the original database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3', 
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+"""
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'cdb',
+        'USER': 'beans',
+        'PASSWORD': 'beansword',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
