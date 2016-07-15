@@ -21,6 +21,7 @@ class Athlete(models.Model):
     
     runsSummary = JSONField(default={})
     fitLines = JSONField(default={})
+    masterList = JSONField(default={})
     
     def __unicode__(self):
         return self.name

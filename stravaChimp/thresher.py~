@@ -23,7 +23,7 @@ def addDistDeltas(df):
     #print df[['lat', 'lng', 'lat2','lng2', 'dist_r']]
     
     df['distDeltas_old'] = copy.deepcopy(df.distDeltas) # saving old distances just in case
-    df['speeds_old'] = copy.deepycopy(df.speeds)
+    df['speeds_old'] = copy.deepcopy(df.speeds)
     
     df['distDeltas'] = np.nan
     for i in range(len(df)):
@@ -458,6 +458,31 @@ def getFitlineLws(df):
     flLws['date'] = df.date[df.index[0]]
     #print(flLws)
     
+    return flLws
+  
+# takes in a two column df and outputs a two-columns df smoothed for lowess
+# input df must be of the form x, y
+
+def makeLws(df, frac=.66, it=3):  
+    col1 = df.columns[0]
+    col2 = df.columns[1]
+
+    lowess = sm.nonparametric.lowess
+    #jitter = np.random.normal(0, .00001, len(df))
+    #df['speeds'] = df.speeds + jitter # bug in statsmodels, adding some jitter as workaround
+
+    lws = lowess(df[col2], df[col1], frac=frac, it=it)
+    lwsX = [z[0] for z in lws]
+    lwsY = [z[1] for z in lws]
+
+    flLws = pd.DataFrame({})
+    flLws[col1] = lwsX
+    flLws[col2] = lwsY
+    
+    #flLws['date'] = df.date[df.index[0]]
+    #print(flLws)
+    
+    print flLws
     return flLws
     
 """

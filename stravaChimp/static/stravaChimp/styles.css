@@ -1,0 +1,512 @@
+
+
+
+:root {
+
+    /* text */
+  --giant-font: 36px;
+  --large-font: 28px;
+  --medium-font: 20px;
+  --small-font: 14px;
+  --tiny-font: 10px;
+  --text-color: white;
+  --master-font: Verdana;
+
+  /* specs */
+  --master-width: 300px;
+  --navbar-width: 50px;
+  --left-adjust: 55px; /*navbar-width plus a margin */
+}
+
+body {
+    background-color: rgba(0, 0, 0, 1);
+    margin: 0px;
+}
+
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
+XX      side navbar   
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
+
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: var(--navbar-width);
+    background-color: rgba(0, 0, 0, 1);
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+    z-index: 20;
+    opacity: .75;
+}
+
+li a {
+    display: block;
+    color: white;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    text-decoration: none;
+}
+
+li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+.navbarItem { /* the text in the item */
+    position: absolute;
+    top: -5px;
+    left: 55px;
+    font-size: var(--medium-font);
+    pointer-events: none;
+}
+
+.navbarLi { /* text positioning responds to nearest positioned ancestor */
+    position: relative;
+    top: 0px;
+}
+
+.navbarExpanded {
+    width: 200px;
+    background-color: red;
+}
+
+
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
+XX      navbar menu   
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
+
+div a, .dropbtn {
+    display: inline-block;
+    color: white;
+    text-align: right;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+div a:hover, .dropdown-content:hover .dropbtn {
+    background-color: #f9f9f9;
+    color: black;
+}
+
+#pic:hover {
+    opacity: 1;
+}
+
+div.dropdown {
+    display: inline-block;
+    float: right;
+    z-index: 20;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 8px;
+    background-color: rgba(0, 0, 0, 0.75);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: right;
+    color: white;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
+XX      text  
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
+
+/* properties common to all text */
+.textGiant, #introTitle, .introTitle, .textLarge, .dashboardBody, .textMedium, .textSmall, .chartTitle, 
+.dashboardTitle, #introSubscript, .introBody, .dashTitleLarge, .dashBodyLarge, #jumptTo, .dashboardUnit,
+.navbarItem {
+    font-family: var(--master-font);
+    color       : var(--text-color);
+    /*font-size  : 18px;
+    font-weight: bold;
+    text-anchor: middle;
+    fill       : white;*/
+}
+
+.textGiant, .introTitle, #introTitle {
+    font-size  : var(--giant-font);
+    font-weight: bold;
+    text-anchor: middle;
+}
+
+#container0 p {
+    text-align: center;
+    padding:5px;
+    margin: 0px;
+}
+
+.textLarge, .dashboardBody {
+    font-size  : var(--large-font);
+}
+
+.dashboardUnit {
+    font-size: var(--small-font);
+    opacity: .5;
+}
+
+.textMedium {
+    font-size  : 20px;
+}
+      
+.chartTitle {
+    font-size  : var(--small-font);
+    margin: 5px;
+    margin-top: 20px;
+    transform: translate(20px, -10px);
+}
+
+.introBody, .dashboardTitle {
+    font-size  : var(--small-font);
+}
+
+.dashTitleLarge {
+    font-size  : var(--medium-font);
+    fill       : var(--text-color);
+    text-anchor: middle;
+    transform: translate(0, 5px);
+}
+
+.dashBodyLarge {
+    font-size  : var(--giant-font);
+    text-anchor: middle;
+    /*font-weight: bold;*/
+    align-items: center;
+    transform: translate(0, 15px);
+}
+
+
+
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
+XX      pics, buttons, other  
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
+
+#jumpTo {
+    font-size  : var(--tiny-font);
+    position: relative;
+    left: -40px;
+    top:0px;
+    /*width: 50px;
+    height: 50px;*/
+    margin: 0;
+    padding: 0;
+    z-index: 2;
+    opacity: 1;
+}
+
+#pic {
+    position: relative;
+    left: 0px;
+    top:0px;
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    padding: 0;
+    z-index: 2;
+    opacity: 1;
+}
+
+#dashPic {
+    position: absolute;
+    left: 10px;
+    top:10px;
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
+    margin: 0;
+    padding: 0;
+    z-index: 2;
+    opacity: 0.75;
+}
+
+
+/* legend and buttons */ 
+
+#legendContainer {
+    position: fixed;
+    right: 20px;
+    top: 30px;
+    width: 100px;
+    height: 100px;
+    font-family: Verdana;
+    font-size  : 12px;
+    fill       : white;
+}
+
+#buttonContainer {
+    position: fixed;
+    right: 60px;
+    top:10px;
+    z-index: 5;
+    width:100px;
+}
+
+#buttonContainer button {
+    width: 100px;
+}
+
+#legendContainer p, #buttonContainer p {
+    color: white;
+    margin: 5px;
+}
+
+
+/* axes */ 
+
+.axis line, .axis path {
+    fill: none;
+    stroke: white;
+    shape-rendering: crispEdges;
+}
+
+.tick line{
+    opacity: 0.2;
+  }
+
+
+/* other */ 
+
+.kill {opacity: 0}
+
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
+XX      containers  
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
+
+/* general container formatting */
+
+#dash, #container1, #container0, #containerD, #containerH, #containerBars {
+    background-color: rgba(0, 0, 0, 0.75);
+    fill: white;
+    outline: #d9d9d9 solid thin;
+    /*border: rgba(0, 0, 0, 0.5) solid thin*/
+
+    /* gradient */
+    background: -webkit-linear-gradient(bottom, rgba(115,115,115, 0.75), rgba(0, 0, 0, 0.75) ); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(bottom, rgba(115,115,115, 0.75), rgba(0, 0, 0, 0.75) ); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(bottom, rgba(115,115,115, 0.75), rgba(0, 0, 0, 0.75) ); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom, rgba(50,50,50, 0.75), rgba(0, 0, 0, 0.75) ); /* Standard syntax */
+}
+
+    /* elements running along the side in run detail*/
+    #container0, #containerH, #containerD {
+        position: fixed;
+        left: var(--left-adjust);
+        width: var(--master-width);
+        margin: 0;
+        padding: 0;
+        z-index: 2;
+    }
+
+        #container0 {
+            top:0px;
+            bottom:75%;
+        }
+            #introContainerTitle {
+                position: absolute;
+                left: 95px;
+                top:10px;
+                width: 200px;
+                height: 75px;
+                margin: 0;
+                padding: 0;
+                z-index: 2;
+                opacity: 1;
+            }
+
+            #introContainerBody {
+                position: absolute;
+                left: 0px;
+                top:95px;
+                width: var(--master-width);
+                margin: 0;
+                padding: 0;
+                z-index: 2;
+                opacity: 1;
+            }
+
+        #mafContainer, #effContainer {
+            position: absolute;
+            /*width: var(--master-width)/2;*/
+            width: 150px;
+            height: 75px;
+            bottom: 0px;
+            z-index: 3;
+        }
+            #mafContainer {
+                left:0px;
+            }
+
+            #effContainer {
+                left: 150px;
+            }
+
+        #containerH {
+            top: 50%;
+            bottom: 25%;
+        }
+
+        #containerD {
+            top: 25%;
+            bottom: 50%;
+        }
+
+    /* speed-hr-time graph along the bottom */
+    #container1 {
+        position: fixed;
+        bottom: 0;
+        left: var(--left-adjust);
+        right:0;
+        top:75%;
+        margin: 0;
+        padding: 0;
+        z-index: 1;
+    }
+
+    /* speed-hr-time graph along the bottom */
+    #containerBars {
+        position: fixed;
+        bottom: 25%;
+        left: 350px;
+        right:0;
+        top:0;
+        margin: 0;
+        padding: 0;
+        /*z-index: 1;*/
+    }
+
+
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
+XX      run detail specific  
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
+
+
+#tooltip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    margin: 0;
+    padding: 10px;
+    width: 15px;
+    height: 12px;
+    color: black;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.0);
+    opacity: 0;
+    pointer-events: none;
+}
+
+#map {
+    width:100%; /*fixing px dimensions pushes map attribution off the page*/
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    z-index: -1;
+}
+
+
+#buttonContainer {
+    position: fixed;
+    right: 5px;
+    bottom:26%;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.speedPt {
+    opacity: 0;
+}
+
+
+/* XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX 
+XX      dashboard specific  
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
+
+
+.highlight {fill:black}
+
+#tooltip, #tooltip2, #tooltipFl {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            margin: 0;
+            padding: 10px;
+            width: 15px;
+            height: 12px;
+            color: black;
+            font-family: sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.0);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+.day {
+  fill: #fff;
+  stroke: #ccc;
+}
+
+.month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+rect.pane {
+  cursor: move;
+  fill: none;
+  pointer-events: all;
+}
+
+#introBody1, #introBody2, #introBody3 {
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  outline: 0px;
+  width: 29%;
+}

@@ -198,7 +198,7 @@ var margin = {top: 20, right: 22, bottom: 25, left: 15},
     w = 960 - margin.left - margin.right,
     h = 200 - margin.top - margin.bottom;
 			
-/// creating main svg
+/// creating svgs
 var svg = d3.select("#container1").append("svg")
     .attr("width", w + margin.left + margin.right)
     .attr("height", h + margin.top + margin.bottom)
@@ -233,7 +233,8 @@ svg.append("defs").append("clipPath")
 // x axis, scale creation (speed-time and hr-time graphs)
 timeScale = d3.scale.linear()
             .domain(oExtent)
-            .range([margin.left, w]);            
+            .range([margin.left, w]);  
+                      
 timeAxis = d3.svg.axis()
             .scale(timeScale)
             .outerTickSize(0)
@@ -652,6 +653,7 @@ fitline = svg3.append("path")
 /////////////////////////////////////////////////////
 // tooltip
 // on mouseover syncing highlights and adding tooltip
+
 d3.selectAll(".point")
     .on("mouseover", function(d) {
         thisTime = d.time
@@ -666,7 +668,7 @@ d3.selectAll(".point")
             
             var x = d3.event.pageX;
             var y = d3.event.pageY;
-            text = 'altD: '+d.altDeltas+' speed: '+d.speeds+' hr: '+d.hr+' del3: '+d.speedDelta3Abs+' cadence: 'd.cadence
+            text = 'altD: '+d.altDeltas+' speed: '+d.speeds+' hr: '+d.hr+' del3: '+d.speedDelta3Abs+' cadence: '+d.cadence
             d3.select("#tooltip")
 				.style("left", x + "px")
 				.style("top", y + "px")

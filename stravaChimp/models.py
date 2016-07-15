@@ -6,7 +6,7 @@ from django.utils import timezone
 class Athlete(models.Model):
     name = models.CharField(max_length=50, null=True)
     athleteId = models.IntegerField(null=True)
-    profilePic = models.ImageField(null=True)
+    profilePic = models.ImageField(null=True, upload_to='profile_pics')
     city = models.CharField(max_length=50, null=True)
     country = models.CharField(max_length=50, null=True)
     sex = models.CharField(max_length=50, null=True)
@@ -22,6 +22,7 @@ class Athlete(models.Model):
     runsSummary = JSONField(default={})
     fitLines = JSONField(default={})
     masterList = JSONField(default={})
+    mafLastFive = JSONField(default={})
     
     def __unicode__(self):
         return self.name
@@ -46,6 +47,7 @@ class Activity(models.Model):
     totalTime = models.FloatField(max_length=50, null=True)
     totalDist = models.FloatField(max_length=50, null=True)
     climb = models.FloatField(max_length=50, null=True)
+    mafScore = models.FloatField(max_length=50, null=True)
     
     
     df = JSONField(null=True)

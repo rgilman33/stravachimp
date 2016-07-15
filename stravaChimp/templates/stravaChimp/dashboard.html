@@ -1,177 +1,1105 @@
-<!DOCTYPE html>
-<head>
-<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+{% extends 'stravaChimp/base.html' %}
 
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
-    <title>Run Detail</title>
-    <!-- Bootstrap core CSS -->
-    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="http://getbootstrap.com/examples/theme/theme.css" rel="stylesheet">    
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="http://getbootstrap.com/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-    <!--<script src="http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script> -->
-    
-<style>
+{% load staticfiles %}   
+  <!--<script src="http://maps.google.com/maps/api/js?sensor=true"></script>  -->
+{% block body_block %}
 
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;
-  position: relative;
-  width: 960px;
-}
-
-		body {
-			background-color: #f0f0f0;
-		}
-        #bars svg, #barsW svg, #roll svg, #fitlines svg {
-			background-color: white;
-            outline: #d9d9d9 solid thin;
-            /*border:  #d9d9d9 solid thin*/
-}
-		
-
-.highlight {fill:black}
-#tooltip, #tooltip2, #tooltipFl {
-			position: absolute;
-			top: 0;
-			left: 0;
-			z-index: 10;
-			margin: 0;
-			padding: 10px;
-			width: 15px;
-			height: 12px;
-			color: black;
-			font-family: sans-serif;
-			font-size: 12px;
-			font-weight: bold;
-			text-align: center;
-			background-color: rgba(0, 0, 0, 0.0);
-			opacity: 0;
-			pointer-events: none;
-		}
-
-text {
-  font: 10px sans-serif;
-}
-
-            
-            
-.kill {opacity: 0}
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-
-.tick line{
-    opacity: 0.1;
-  }
-
-/*
-form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-*/
-
-.day {
-  fill: #fff;
-  stroke: #ccc;
-}
-
-.month {
-  fill: none;
-  stroke: #000;
-  stroke-width: 2px;
-}
-
-.overlay {
-  fill: none;
-  pointer-events: all;
-}
-
-rect.pane {
-  cursor: move;
-  fill: none;
-  pointer-events: all;
-}
-</style>
-</head>
-
-<body>
-
-<h1><a href="{% url 'run_detail' athleteId=athleteId activityId=466777343 %}">Beans McBeans</a></h1>
-
-<div id="tooltip">
-</div>
-
-<div id="tooltipFl">
-</div>
-
+<!--
 <form>
   <label><input type="radio" name="mode" value="grouped"> Grouped</label>
   <label><input type="radio" name="mode" value="stacked" checked> Stacked</label>
 </form>
+-->
 
-<div id="buttonContainer">
-	<button id="reset">All</button>
+  <ul id="sideNavbar">
+    <li class="navbarLi">
+        <a class="active" id="dashLink" href="{% url 'dashboard' athleteId=athleteId %}">
+           <img src="{% static "stravaChimp/bars.png" %}" alt="dash" class='navbarIcon'/>
+        </a>
+        <p class="navbarItem">Dashboard</p>
+    </li>
+    <li class="navbarLi">
+        <a id="pregLink" href="{% url 'run_detail' athleteId=athleteId activityId=531149733 %}">
+           <img src="{% static "stravaChimp/preg.png" %}" alt="dash" class='navbarIcon'/>
+        </a>
+        <p class="navbarItem">Preggers</p>
+    </li>
+    <li class="navbarLi">
+        <a href="{% url 'dashboard' athleteId=athleteId %}">
+           <img src="{% static "stravaChimp/account.png" %}" alt="dash" class='navbarIcon'/>
+        </a>
+        <p class="navbarItem">Torso</p>
+    </li>
+  </ul>
+
+
+<div id="containerD">
 </div>
 
-<div id="buttonContainer">
-	<button id="month">Last 30 days</button>
-</div>
+  <div id="container0">
+        <img src="{% static "stravaChimp/rudy.jpg" %}" alt="Picture of rudy" id='dashPic'/>
+        <!--<img src="{% static "stravaChimp/rudy.jpg" %}" alt="Picture of rudy" id='pic'/>
+        <img src="{{ath.profilePic}" alt="Picture of rudy"/>-->
+        <div id="introContainerTitle">
+            <p class="textGiant" id="introTitle"></p>
+            <p id="introSubscript"></p>
+        </div>
+        <!--
+        <div id="introContainerBody">
+            <p id="introBody1" class='introBody'></p>
+            <p id="introBody2"class='introBody'></p>
+            <p id="introBody3" class='introBody'></p>
+        </div>-->
 
-<div class="row">
-  <div class="col-md-9" id="bars" style='height:350px;width:900px;'>
+          <div id="mafContainer">
+          </div>
+
+          <div id="effContainer">
+          </div>
   </div>
-  <div class="col-md-3" id="singleRun">
+
+<div id="containerH">
+</div>
+
+<div id="container1">
+</div>
+
+<div id="containerBars">
+</div>
+
+ <div id="legendContainer">
+    <p>Legend</p>
+  </div>
+
+<div class="dropdown">
+  <p class="dropbtn" id="jumpTo">Jump to:</p>
+  <div class="dropdown-content">
+    <a href="#" id="week">Last 7 Days</a>
+    <a href="#" id="month">Last 30 Days</a>
+    <a href="#" id="year">Last 365 Days</a>
   </div>
 </div>
-   
-<div id="barsW"> 
-</div>
-<form>
-  <label><input type="radio" name="mode" value="rolling7"> rolling7</label>
-  <label><input type="radio" name="mode" value="weekbyweek" checked> weekbyweek</label>
-</form>
-<div id="roll"> 
-</div>
 
-<div id="fitlines"> 
-</div>
-
-<div id="calendar"> 
-</div>
-
-
-  <!-- Site footer -->
-  <footer class="footer">
-    <p>&copy; 2015 Beans, Inc.</p>
-  </footer>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="http://getbootstrap.com/assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script src="http://getbootstrap.com/assets/js/vendor/holder.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 
-<script src="http://d3js.org/d3.v3.min.js"></script>
+
 <script>
+
+//{% block content %}
+
+var navbarActive = "dashLink";
+
+configNavbar();
+
+var startScript = Date.now();
+
+var athName = "{{athName}}";
+
+var athAge = 30;
+
+var athLoc = "Denver, CO";
+
+var athCred = "2:22"
+
+d3.select("#introTitle").append("text")
+    .text(athName)
+    .attr("class", "introTitle");
+
+d3.select("#introBody1").append("text")
+    .html("Age<br/>"+athAge)
+    .attr("class", "introBody");
+
+d3.select("#introBody2").append("text")
+    .html("Location<br/>"+athLoc)
+    .attr("class", "introBody");
+
+d3.select("#introBody3").append("text")
+    .html("Marathon<br/>"+athCred)
+    .attr("class", "introBody");
+
+
+var masterWidth = 1000
+
+
+
+function updateBars() {
+
+  d3.select("#svgBars").remove();
+  makeStackedBarsChart();
+  makeStackedBarsX(existingExtent);
+  makeMafPts();
+
+  d3.select("#svgBarsW").remove();
+  makeStackedBarsW();
+  svgAppendZoom();
+
+  
+  d3.selectAll(".brush")      // clearing brush from all graphs
+          .call(brush.clear());   
+
+  makeBrushSvgW();
+
+  makeStackedBars();
+
+  makeMafLineW();
+
+  makeToolTip();
+  
+  makeBarsW();
+
+  svgWAppendBrush();
+  brush.extent(existingExtent);     
+  svgW.select('.brush')
+        .call(brush);      
+  redrawChart();
+}
+
+window.onresize = updateBars;
+
+
+
+
+//var runCal = JSON.parse('{{ summaryDf_json | escapejs }}');
+
+var runCal = JSON.parse('{{ath.runsSummary | escapejs}}'),
+    summaryDf = runCal,
+    masterList = JSON.parse('{{ath.masterList | escapejs}}');
+
+//////////////////////////////////////////////////////////////
+//
+//   Dashboard
+///////////////////////////////////////////////////////////////
+
+/*
+var wD = d3.select("#containerD").node().clientWidth,
+    hD = d3.select("#containerD").node().clientHeight,
+
+    svgDash = d3.select("#containerD")
+                .append("svg")
+                .attr("width", wD)
+                .attr("height", hD);*/
+
+var segDist = Math.round(d3.sum(summaryDf, function(d) {return d.totalDist}));    
+var segTime = Math.round(d3.sum(summaryDf, function(d) {return d.totalTime}));
+var segClimb = Math.round(d3.sum(summaryDf, function(d) {return d.climb}));
+var segAvgHr = Math.round(d3.mean(summaryDf, function(d) {return d.avgHr}));
+
+var titles = ['Distance', 'Time', 'Climb', 'Avg Hr', 'Hr Std', 'Max Hr'],
+    values = [segDist, segTime, segClimb, segAvgHr, 5, 6],
+    dashUnits = ["miles", "hours", "meters", "beats/min", "beats", "beats"],
+    numRows = 2;
+
+var dashOptions = {
+    //'svg':svgDash,
+    'units':dashUnits,
+    'dom': "#containerD",
+    'titles': titles,
+    'values': values,
+    'numRows': numRows
+};
+
+makeDashChart();
+makeDash(dashOptions);
+
+
+
+/////////////////////////////////////////////////////////////
+// histogram
+//
+/////////////////////////////////////////////////////////////
+
+var hrs = new Array();
+for (i=0; i<masterList.length; i++) {
+    hrs.push(masterList[i].hr)
+};
+
+var cW = 300;
+
+var histOptions = {
+    'dom': "#containerH",
+    'margin': histMargin,
+    'w': cW,
+    'h': d3.select("#containerH").node().clientHeight,
+    'numBins': 40,
+    'values': hrs
+};
+
+makeHistChart(histOptions);
+
+
+////////////////////////////////////////////////////////
+//
+//  bars by zone 
+////////////////////////////////////////////////////////
+
+var barsStart = Date.now();
+console.log("start script to start stacked bars took "+ (barsStart-startScript));
+
+var recovery = JSON.parse('{{ recovery_json | escapejs }}');
+var easy = JSON.parse('{{ easy_json | escapejs }}');
+var stamina = JSON.parse('{{ stamina_json | escapejs }}');
+var impulse = JSON.parse('{{ impulse_json | escapejs }}');
+console.log(recovery)
+var athleteId = {{ athleteId }};
+
+var rec = new Array();
+var ea = new Array();
+var stam = new Array();
+var imp = new Array();
+
+for (key in recovery) { rec.push(recovery[key]) };
+for (key in easy) { ea.push(easy[key]) };
+for (key in stamina) { stam.push(stamina[key]) };
+for (key in impulse) { imp.push(impulse[key]) };
+
+var rawData = new Array(rec, ea, stam, imp);
+
+var barsEnd = Date.now();
+console.log("prepping stacked bars took "+ (barsEnd-barsStart));
+
+
+function makeStackedBarsChart() {
+  n = rawData.length; // number of layers
+  m = rawData[0].length; // number of samples per layer
+  stack = d3.layout.stack();
+  layers = stack(rawData);
+  yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); });
+  yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return u(d.y0 + d.y); }); });
+
+  margin = masterMargin;
+
+  width = d3.select("#containerBars").node().clientWidth-margin.right-margin.left;
+  height = d3.select("#containerBars").node().clientHeight-margin.top-margin.bottom;
+
+  jsDay = 86400000;    //Each day is 86400 seconds
+  now = Date.now();
+
+  mExtent = [(now-jsDay*30),now];
+  wExtent = [(now-jsDay*7),now];
+  yExtent = [(now-jsDay*365),now];
+
+  oExtent = [
+      d3.min(layers, function(layer) { return d3.min(layer, function(d) { return d.x; }) - jsDay; }),
+      now + jsDay 
+      ];
+   
+  /// creating svg for bars by zone
+  svg = d3.select("#containerBars").append("svg")
+      .attr("id", "svgBars")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); 
+    
+     
+  // making clipPath
+  svg.append("defs").append("clipPath")
+      .attr("id", "clipBars")
+    .append("rect")
+      //.attr("x", margin.left)
+      .attr("transform", "translate(1, 0)")
+      .attr("width", width-2)
+      .attr("height", height);
+      
+  // overlay for help with zoom
+  svg.append("rect")
+      .attr("class", "overlay")
+      .attr("width", width)
+      .attr("height", height);    
+      
+  svg.append("text")
+        .text("Timeline Explorer")
+        .attr("class", "chartTitle");
+      
+      
+  //////////////////////////////////////////////////
+  /// creating axes
+
+  y = d3.scale.linear()   // y scale
+      .domain([0, yStackMax])
+      .range([height, 0]);  
+
+  yAxis = d3.svg.axis()
+      .scale(y)
+      .innerTickSize(-width)
+      .outerTickSize(0)
+      .tickPadding(10)
+      .orient("left");
+      
+  //// Appending axes   
+  svg.append("g")
+      .attr("class", "y axis")
+      //.attr("transform", "translate("+margin.left+",0)")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90) translate(-10, 0)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Miles");    
+
+  // inverting to reflect fact that increase in fitness = decrease in min / mile
+  mafYDomain = [12, 5];
+  //mafYDomain = [d3.min(runCal, function(d) {return uMaf(d.mafScore)}), d3.max(runCal, function(d) {return uMaf(d.mafScore)})]
+
+  mafY = d3.scale.linear() // maf y scale
+    .domain(mafYDomain)
+    .range([height, 0]);
+
+  mafYAxis = d3.svg.axis()
+    .scale(mafY)
+    .innerTickSize(0)
+    .outerTickSize(0)
+    .tickPadding(10)
+    .orient("right");
+
+  svg.append("g")
+    .attr("class", "y axis")
+    .attr("transform", "translate("+(width)+",0)")
+    .call(mafYAxis)
+  .append("text")
+    .attr("transform", "rotate(-90) translate(-10,-18)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("MAF");  
+
+};
+makeStackedBarsChart();
+
+
+
+function makeStackedBarsX(xDomainExtent){
+  x = d3.time.scale()  // x scale
+      .domain(xDomainExtent)
+      .range([0, width]);
+
+  xAxis = d3.svg.axis()
+      .scale(x)
+      .tickSize(0)
+      .tickPadding(6)
+      .orient("bottom");
+
+  xAxisTop = d3.svg.axis()
+      .scale(x)
+      .tickSize(0)
+      .ticks(0)
+      .orient("top");
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      //.attr("transform", "translate(0," + height + ")")
+      .call(xAxisTop);
+};
+makeStackedBarsX(oExtent);
+
+
+
+///////////////
+// actual maf pts
+///////////////
+
+// scale and axis
+
+function getMafPtRad() {
+    if (getBarW()/4 > 3) {
+        return getBarW()/4 
+    } else {
+        return 3
+    }
+}; 
+ 
+// pts
+
+function makeMafPts() {
+    mafPts = svg.selectAll(".point")
+            .data(runCal)
+            .enter().append("circle")
+            .attr("clip-path", "url(#clipBars)")
+            .attr("class", "point")
+            .attr("r", getMafPtRad())
+            .attr("cx", function(d) { return x(d.date) + getBarW()/2; })
+            .attr("cy", function(d) { return mafY(uMaf(d.mafScore)); })
+            .style("stroke", "black");
+            //.style("fill", hrPtColor)
+            //.style("opacity", ptFillOp)
+            //.style("stroke-opacity", ptStrOp);
+};
+
+makeMafPts();
+
+
+
+
+/////////////////////////////////////////////////////////
+//  General dashboard panel constructor
+/////////////////////////////////////////////////////////
+
+//var rollDfData7 = JSON.parse('{{ rollingDf_json | escapejs }}')
+var r5 = JSON.parse('{{ r5 | escapejs }}'),
+    //mafDash = JSON.parse('{{ maf_json | escapejs }}'),
+    mafDash = JSON.parse('{{ ath.mafLastFive | escapejs }}'),
+    currentMaf = '{{ currentMaf }}',
+    effScore = "89%";
+
+/*
+    dist7 = ('{{ dist7 }}' / 1600).toFixed(1),
+    time7 = ('{{ time7 }}' / 60).toFixed(1),
+    climb7 = '{{ climb7 }}',
+    avgHr7 = '{{ avgHr7 }}',
+    hrStd7 = '{{ var7 }}',
+    tE7 = Math.round('{{ tE7 }}'*100),*/
+
+
+
+var panelHeight = d3.select("#mafContainer").node().clientHeight, 
+    panelWidth = d3.select("#mafContainer").node().clientWidth;
+
+/////////////  maf panel  //////////////////
+var mafPanelOptions = {
+    'dom':"#mafContainer", 
+    'title':"maf", 
+    "body":currentMaf, 
+    'w': panelWidth,   //d3.select("#mafContainer").node().clientWidth, 
+    'h': panelHeight,   //d3.select("#mafContainer").node().clientHeight, 
+    'c':"Large",
+    'id': "Maf"
+};
+makeDashPanel(mafPanelOptions);
+
+
+var mafDashLineOptions = {
+    'svg':d3.select("#dashSvgMaf"),
+    'dom':"#mafContainer",
+    'w': panelWidth,
+    'h': panelHeight,
+    'pad':20,
+    'df':mafDash,
+    'xcol':'date',
+    'ycol':'mafScore'
+};
+appendDashPanelLine(mafDashLineOptions);
+
+var effPanelOptions = {
+    'dom':"#effContainer", 
+    'title':"eff", 
+    "body":effScore, 
+    'w':panelWidth, 
+    'h':panelHeight, 
+    'c':"Large",
+    'id': "Eff"
+};
+makeDashPanel(effPanelOptions);
+
+
+
+
+    
+////////////////////////////////////////////////////////
+//
+//  WEEKLY SUMMARY bars by zone 
+////////////////////////////////////////////////////////
+
+var recoveryW = JSON.parse('{{ recoveryW_json | escapejs }}');
+var easyW = JSON.parse('{{ easyW_json | escapejs }}');
+var staminaW = JSON.parse('{{ staminaW_json | escapejs }}');
+var impulseW = JSON.parse('{{ impulseW_json | escapejs }}');
+
+//var athleteId = {{ athleteId }}
+
+var recW = new Array();
+var eaW = new Array();
+var stamW = new Array();
+var impW = new Array();
+
+for (key in recoveryW) { recW.push(recoveryW[key]) };
+for (key in easyW) { eaW.push(easyW[key]) };
+for (key in staminaW) { stamW.push(staminaW[key]) };
+for (key in impulseW) { impW.push(impulseW[key]) };
+
+rawDataW = new Array(recW, eaW, stamW, impW);
+
+function makeStackedBarsW() {
+
+  n = rawDataW.length; // number of layers
+  m = rawDataW[0].length; // number of samples per layer
+  stackW = d3.layout.stack();
+  layersW = stackW(rawDataW);
+  yGroupMaxW = d3.max(layersW, function(layerW) { return d3.max(layerW, function(d) { return u(d.y); }); });
+  yStackMaxW = d3.max(layersW, function(layerW) { return d3.max(layerW, function(d) { return u(d.y0 + d.y); }); });
+
+  marginW = margin; //{top: 20, right: 10, bottom: 20, left: 12},
+  widthW = d3.select("#container1").node().clientWidth - marginW.right - marginW.left;
+  heightW = d3.select("#container1").node().clientHeight - marginW.top - marginW.bottom; 
+
+  oExtentW = [ now - jsDay*365, now + jsDay*7];
+
+  xW = d3.time.scale()  // x scale
+      .domain(oExtentW)
+      .range([0, widthW]);
+
+  yW = d3.scale.linear()   // y scale
+      .domain([0, yStackMaxW])
+      .range([heightW, 0]);
+   
+  /// creating svg for bars by zone
+  svgW = d3.select("#container1").append("svg")
+      .attr("id", "svgBarsW")
+      .attr("width", widthW + marginW.left + marginW.right)
+      .attr("height", heightW + marginW.top + marginW.bottom)
+    .append("g")
+      .attr("transform", "translate(" + marginW.left + "," + marginW.top + ")"); 
+      
+     
+  // making clipPath
+  svgW.append("defs").append("clipPath")
+      .attr("id", "clip")
+    .append("rect")
+      //.attr("x", marginW.left)
+      .attr("width", widthW -2)
+      .attr("height", heightW -2)
+      .attr("transform", "translate(1,1)");
+
+  svgW.append("text")
+        .text("Timeline")
+        .attr("class", "chartTitle");
+          
+      
+  //////////////////////////////////////////////////
+  /// creating axes
+  xAxisW = d3.svg.axis()
+      .scale(xW)
+      .tickSize(0)
+      .tickPadding(6)
+      .orient("bottom");
+
+  yAxisW = d3.svg.axis()
+      .scale(yW)
+      .innerTickSize(-widthW)
+      .outerTickSize(0)
+      .tickPadding(5)
+      .ticks(5)
+      .orient("left");
+
+  xAxisWTop = d3.svg.axis()
+      .scale(xW)
+      .tickSize(0)
+      .ticks(0)
+      .orient("top");
+      
+  //// Appending axes
+  svgW.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + heightW + ")")
+      .call(xAxisW);
+
+  svgW.append("g")
+      .attr("class", "x axis")
+      //.attr("transform", "translate(0," + heightW + ")")
+      .call(xAxisWTop);
+        
+  svgW.append("g")
+      .attr("class", "y axis")
+      //.attr("transform", "translate("+marginW.left+",0)")
+      .call(yAxisW)
+    .append("text")
+      .attr("transform", "rotate(-90) translate(-10, 0)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Miles");  
+}
+
+makeStackedBarsW();
+
+/////////////////////////////////
+// zoom
+/////////////////////////////////
+  
+  
+var minDate = oExtent[0];
+var maxDate = oExtent[1];
+  
+var zoom = d3.behavior.zoom()
+    .x(x)
+    .on('zoom', function() {
+
+        // setting minimum zoom
+        if (x.domain()[1] - x.domain()[0] < 1000) return;
+
+        // preventing over-zoom
+        if (x.domain()[0] < minDate) {
+	        var xT = zoom.translate()[0] - x(minDate) + x.range()[0];
+          zoom.translate([xT, 0]);
+            } 
+        else if (x.domain()[1] > maxDate) {
+	        var xT = zoom.translate()[0] - x(maxDate) + x.range()[1];
+          zoom.translate([xT, 0]);
+            }
+
+        redrawChart();
+        updateViewportFromChart();
+    });
+
+function updateViewportFromChart() {
+    if ((x.domain()[0] <= minDate) && (x.domain()[1] >= maxDate)) {
+        brush.extent(oExtent);
+    }
+    else {
+        brush.extent(x.domain());
+    }
+    svgW.select('.brush').call(brush);
+}
+
+function updateZoomFromChart() {
+    zoom.x(x);   
+    var fullDomain = maxDate - minDate,
+        currentDomain = x.domain()[1] - x.domain()[0];
+
+    var minScale = currentDomain / fullDomain,
+        maxScale = minScale * 20;
+    zoom.scaleExtent([minScale, maxScale]);
+}
+
+// Placement of this pane interacts with tooltips. putting it up here lets tooltips come through.
+function svgAppendZoom() {
+  svg.append("rect")
+      .attr("class", "pane")
+      .attr("width", width)
+      .attr("height", height)
+      .call(zoom); 
+}
+svgAppendZoom();
+
+/////////////////////////////////////////////////////////     
+// adding brush
+////////////////////////////////////////////////
+
+function makeBrushSvgW() {
+  brush = d3.svg.brush()
+      .x(xW)
+      .on("brush", function() {
+          x.domain(brush.extent()); // updating domain to reflect brush
+          redrawChart();
+          })
+      .on("brushend", function () {
+          updateZoomFromChart();
+      });
+  }
+makeBrushSvgW();
+
+function getY() {
+    if (barStacked) {
+        return function(d) { return y(u(d.y0) + u(d.y)); } }
+    else { return function(d) { return y(u(d.y)); } }   };
+
+function getX() {
+    if (barStacked) {
+        return function(d) { return x(d.x); } }
+    else { return function(d, i, j) { return x(d.x) + getBarW() / n * j; } }  };
+
+function getW() {
+    if (barStacked) {
+        return getBarW() }
+    else { return getBarW() / n }  };
+    
+function getBarW() { 
+    var currentDomain = x.domain()[1] - x.domain()[0]; // calculating bar width
+    var jsDay = 86400000;
+    var days = currentDomain / (jsDay+1);
+    
+    // limits bars to maximum width of 50 and minimum of 5
+    if ((width / days) -2 < 50) {
+      if ((width / days) -2 < 2) {return 2};
+      var bwt = (width / days) -2;
+    } 
+    else {
+      var bwt = 50;
+    };
+    return bwt };
+
+
+
+
+function redrawChart() {          // drawing up new graphs
+
+    if (brush.extent()[1] - brush.extent()[0] > 50) {  // only brushing when brush width exceeds xxx
+
+      existingExtent = brush.extent();
+    
+      layer.selectAll(".zoneRect")
+          .data(function(d) { return d; })
+          .transition()
+          .duration(1)  // short transition
+          .attr("x", getX())
+          .attr("y", getY())   
+          .attr("width", getW())
+          .attr("height", function(d) { return y(u(d.y0)) - y(u(d.y0 + d.y)); } );
+          
+      // updating maf pts
+      mafPts.remove();
+      makeMafPts();
+       
+      // updating x axis
+      svg.select('.x.axis')
+      .call(xAxis);      
+
+      // updating dash
+      
+      var bunch = summaryDf
+              .filter(function (d) {
+                  if (brush.extent()[0] <= d.date && d.date <= brush.extent()[1]) {
+                      return true
+                  }
+              }); 
+
+      
+      var masterBunch = masterList
+              .filter(function (d) {
+                  if (brush.extent()[0] <= d.date && d.date <= brush.extent()[1]) {
+                      return true
+                  }
+              }); 
+
+      
+      newSegDist = Math.round(u(d3.sum(bunch, function(d) {return d.totalDist})));      
+      newSegTime = Math.round(t(d3.sum(bunch, function(d) {return d.totalTime})));   
+      newSegClimb = Math.round(d3.sum(bunch, function(d) {return d.climb}));  
+      newSegAvgHr = Math.round(d3.mean(masterBunch, function(d) {return d.hr})); 
+      newSegHrDev = Math.round(d3.deviation(masterBunch, function(d) {return d.hr})); 
+      newSegMaxHr = Math.round(d3.max(masterBunch, function(d) {return d.hr}));
+
+      var newValues = [newSegDist, newSegTime, newSegClimb, newSegAvgHr, newSegHrDev, newSegMaxHr];
+
+      var newDashOptions = {
+          'svg':svgDash,
+          'titles': titles,
+          'values': newValues,
+          'numRows': numRows,
+          'units':dashUnits
+      };
+
+      b0.remove(); // removing old g
+      makeDash(newDashOptions); // and adding new one
+
+
+      ///////////
+      // histogram
+      
+      var newHrs = new Array();
+      for (i=0; i<masterBunch.length; i++) {
+          newHrs.push(masterBunch[i].hr)
+      };
+
+      svgH.selectAll("#histBars").remove();
+      svgH.select("#yAxis").remove();
+      makeHistY(newHrs);
+      makeHistBars(newHrs);
+      
+    }; //end if statement
+      
+};
+  
+   
+d3.select("#reset")             // Resetting to original view
+    .on("click", function() {  
+        brush.extent(oExtent);  // FINALLY IT WORKS       
+        svg.select('.brush')
+            .call(brush);      
+        redrawChart();
+    } );  
+   
+var goMonth = function() {  
+        brush.extent(mExtent);     
+        x.domain(mExtent);  
+        //svg.select('.brush')
+        //.call(brush);   
+        svgW.select('.brush')
+            .call(brush);  
+        redrawChart();
+        updateViewportFromChart();
+        updateZoomFromChart();
+          }
+d3.select("#month")             // setting to month
+    .on("click", goMonth);  
+
+var goWeek = function() {
+        brush.extent(wExtent);     
+        x.domain(wExtent);  
+        //svg.select('.brush')
+        //.call(brush);   
+        svgW.select('.brush')
+            .call(brush);  
+        redrawChart();
+        updateViewportFromChart();
+        updateZoomFromChart();
+}     
+d3.select("#week")             // setting to month
+    .on("click", goWeek);   
+
+var goYear = function() {
+        brush.extent(yExtent);     
+        x.domain(yExtent);  
+        //svg.select('.brush')
+        //.call(brush);   
+        svgW.select('.brush')
+            .call(brush);  
+        redrawChart();
+        updateViewportFromChart();
+        updateZoomFromChart();
+}     
+d3.select("#year")             // setting to month
+    .on("click", goYear);   
+
+
+var currentDomain = mExtent[1] - mExtent[0] // change this when changing init
+var days = currentDomain / jsDay
+var bwt = width / days
+
+var barWidth = bwt-2;
+
+
+
+/////////////////////////////////////////////////////////////////
+/// appending layers etc
+
+function makeStackedBars() {
+  layer = svg.selectAll(".layer")
+      .data(layers)
+    .enter().append("g")
+      .attr("class", "layer")
+      .attr("clip-path", "url(#clipBars)")
+      .style("fill", function(d, i) { return color(i); });
+
+  rect = layer.selectAll("rect")
+      .data(function(d) { return d; })
+    .enter().append("rect")
+      .attr("class", "zoneRect")
+      .attr("x", function(d) { return x(d.x); })
+      .attr("width", getBarW())
+      .attr("y", getY())
+      .attr("height", function(d) { return y(u(d.y0)) - y(u(d.y0 + d.y)); });
+
+  /*rect.transition()   // initial transition into place
+      .delay(function(d, i) { return i * 10; })
+      .delay(0)
+      .attr("y", function(d) { return y(d.y0 + d.y); })
+      .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); });*/
+};
+
+makeStackedBars();
+
+/////////////////////////////////////////////////////////////////
+/// appending layers etc WEEKLY
+
+
+
+
+function makeBarsW() {
+    var weekWidth = (widthW / 53 ) - 2;  // this gotta be updated when barW scale is set
+
+    var layerW = svgW.selectAll(".layer")
+        .data(layersW)
+      .enter().append("g")
+        .attr("class", "layer")
+        .attr("clip-path", "url(#clip)")
+        .style("fill", function(d, i) { return color(i); });
+
+    var rectW = layerW.selectAll("rect")
+        .data(function(d) { return d; })
+      .enter().append("rect")
+        .attr("class", "zoneRect")
+        .attr("x", function(d) { return xW(d.x); })
+        .attr("width", weekWidth)
+        .attr("y", function(d) { return yW(u(d.y0 + d.y)); })
+        .attr("height", function(d) { return yW(u(d.y0)) - yW(u(d.y0 + d.y)); });
+
+    /*
+    rectW.transition()   // initial transition into place
+        .delay(function(d, i) { return i * 10; })
+        .attr("y", function(d) { return yW(d.y0 + d.y); })
+        .attr("height", function(d) { return yW(d.y0) - yW(d.y0 + d.y); });*/
+    };
+makeBarsW();   
+
+// weekly maf line (lws smoothed)
+ 
+var mafData = JSON.parse('{{ mafPts_smoothed_json | escapejs }}');
+
+function makeMafLineW(){
+  yWMf = d3.scale.linear()   // y scale
+      .domain(mafYDomain)
+      .range([heightW, 0]);
+      
+  mafYWAxis = d3.svg.axis()
+      .scale(yWMf)
+      .innerTickSize(0)
+      .outerTickSize(0)
+      .ticks(5)
+      .tickPadding(10)
+      .orient("right");
+   
+  svgW.append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate("+(widthW)+",0)")
+      .call(mafYWAxis)
+    .append("text")
+      .attr("transform", "rotate(-90) translate(-10,-18)")
+      //.attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("MAF");  
+      
+  mafLine = d3.svg.line()
+      .x(function(d) {return xW(d.date)})
+      .y(function(d) {return yWMf(uMaf(d.mafScore))});
+      
+    
+  svgW.append("path")
+        .datum(mafData)
+        .attr("class", "line")
+        //.attr("clip-path", "url(#clip)")
+        .attr("d", mafLine)
+        .style("fill", "none")
+        .style("stroke-width", 1)
+        .style("stroke", "white");
+}
+makeMafLineW();
+
+////////////////////////////////////////////
+// Transition logic
+////////////////////////////////////////////
+
+d3.selectAll("input").on("change", change); // radio buttons cued to change when pressed
+
+function change() {
+  if (this.value === "grouped") transitionGrouped() 
+  else transitionStacked();
+}
+
+function transitionGrouped() {    // transition into groups
+  y.domain([0, yGroupMax]);
+
+  rect.transition()
+      .duration(500)
+      .delay(function(d, i) { return i * 10; })
+      .attr("x", function(d, i, j) { return x(d.x) + getBarW() / n * j; })
+      .attr("width", getBarW() / n)
+    .transition()
+      .attr("y", function(d) { return y(d.y); })
+      .attr("height", function(d) { return height - y(d.y); });
+      
+   svg.select('.y.axis')
+    .call(yAxis);
+    
+   barStacked = !barStacked;
+}
+
+function transitionStacked() {    // transition into stacks
+  y.domain([0, yStackMax]);
+
+  rect.transition()
+      .duration(500)
+      .delay(function(d, i) { return i * 10; })
+      .attr("y", function(d) { return y(d.y0 + d.y); })
+      .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
+    .transition()
+      .attr("x", function(d) { return x(d.x); })
+      .attr("width", getBarW());
+      
+  svg.select('.y.axis')
+    .call(yAxis);
+    
+  barStacked = !barStacked;
+}
+ 
+
+ 
+/////////////////////////////////////////////////////
+// tooltip for zone rects
+// 
+
+var jsHour = jsDay / 24;
+
+function makeToolTip() {
+  svg.selectAll(".zoneRect")
+      .on("mouseover", function(d) {
+
+          thisTime = new Date(d.x)
+          svg.selectAll(".zoneRect")
+              .filter(function(d) {
+                  if (format(new Date(d.x)) == format(thisTime)) {return true}
+                  })
+                  .classed("highlight", true)
+                  //.style("fill", "black");
+                  
+          var x = d3.event.pageX;
+          var y = d3.event.pageY;
+          text = new Date(d.x);
+          d3.select("#tooltip")
+  		    .style("left", x + "px")
+  		    .style("top", y + "px")
+  		    .style("opacity", 1)
+  		    .text(text);
+  		    
+  		    
+          // highlighting fit bars        
+  		var elemented = document.getElementById(String(thisTime.getTime()));
+  		d3.select(elemented)
+  		    .style("stroke", "black")
+  		    .attr("class", "hlfl")
+                  })
+                 
+      .on("mouseout", function(d) {
+      
+              thisTime = new Date(d.x)
+              svg.selectAll(".zoneRect")
+              .classed("highlight", false);
+              //.style("fill", ptColor);
+              
+              d3.select("#tooltip")
+                  .style("opacity", 0);
+
+              //d3.selectAll(".hlfl")
+              //    .style("stroke", dateColorScale(thisTime.getTime()))
+           })
+           
+      .on("click", function(d) {
+              var activityId = data3[format(new Date(d.x))].id
+              var url = "http://127.0.0.1:8000/"+String(athleteId)+"/run_detail/"
+              //var url = "http://reddlee.pythonanywhere.com/"
+              url += activityId
+              window.location = url
+       }          
+           );
+}
+makeToolTip();
+
+
+
+
+function svgWAppendBrush() {
+  svgW.append("g")                 // adding brush to svgW
+      .attr("class", "brush")
+      .call(brush)
+      .selectAll("rect")
+      .attr("height", heightW)
+      .style("opacity", .15);
+}
+svgWAppendBrush();
+
+// initializing at one month */
+goMonth(); 
+
+
+
+
 
 
 
@@ -181,17 +1109,14 @@ rect.pane {
 //
 //////////////////////////////////////////////////////////////////////
 
-{% block content %}
-//var runCal = JSON.parse('{{ summaryDf_json | escapejs }}');
 
-var runCal = JSON.parse('{{ath.runsSummary | escapejs}}');
 
 var width3 = 700,
     height3 = 90,
     cellSize = 12; // cell size
 
 var percent = d3.format(".1%"),
-    format = d3.time.format("%Y-%m-%d"),
+    format = d3.time.format("%c"),
     formatMil = d3.time.format("%L");
 
 // Year that data begins
@@ -281,791 +1206,13 @@ function monthPath(t0) {
 
 d3.select(self.frameElement).style("height", "2910px");
 
+//{% endblock %}
 
-
-
-
-
-
-
-
-////////////////////////////////////////////////////////
-//
-//  bars by zone 
-////////////////////////////////////////////////////////
-
-
-var recovery = JSON.parse('{{ recovery_json | escapejs }}');
-var easy = JSON.parse('{{ easy_json | escapejs }}');
-var stamina = JSON.parse('{{ stamina_json | escapejs }}');
-var impulse = JSON.parse('{{ impulse_json | escapejs }}');
-
-var athleteId = {{ athleteId }}
-
-var rec = new Array();
-var ea = new Array();
-var stam = new Array();
-var imp = new Array();
-
-for (key in recovery) { rec.push(recovery[key]) };
-for (key in easy) { ea.push(easy[key]) };
-for (key in stamina) { stam.push(stamina[key]) };
-for (key in impulse) { imp.push(impulse[key]) };
-
-rawData = new Array(rec, ea, stam, imp);
-
-var n = rawData.length, // number of layers
-    m = rawData[0].length, // number of samples per layer
-    stack = d3.layout.stack(),
-    layers = stack(rawData),
-    yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); }),
-    yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
-
-var margin = {top: 20, right: 10, bottom: 20, left: 20},
-    width = 900 - margin.left - margin.right,
-    height = 350 - margin.top - margin.bottom;
-
-var jsDay = 86400000;    //Each day is 86400 seconds
-var now = Date.now();
-
-mExtent = [(now-jsDay*30),now];
-
-oExtent = [
-    d3.min(layers, function(layer) { return d3.min(layer, function(d) { return d.x; }) - jsDay; }),
-    now + jsDay 
-    ];
-
-var x = d3.time.scale()  // x scale
-    .domain(oExtent)
-    .range([margin.left, width]);
-
-var y = d3.scale.linear()   // y scale
-    .domain([0, yStackMax])
-    .range([height, 0]);
-
-
-/// creating svg for bars by zone
-var svg = d3.select("#bars").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")"); 
-  
-   
-// making clipPath
-svg.append("defs").append("clipPath")
-    .attr("id", "clip")
-  .append("rect")
-    .attr("x", margin.left)
-    .attr("width", width-margin.left)
-    .attr("height", height);
-    
-// overlay for help with zoom
-svg.append("rect")
-    .attr("class", "overlay")
-    .attr("width", width)
-    .attr("height", height);    
-    
-var barStacked = true; // boolean to help w stacked vs grouped state of bars
-
-var color = d3.scale.linear()  // color scale
-    .domain([3,2,1,0])
-    .range(["#d7191c","#fdae61","#a6d96a","#1a9641"]);
-    
-    
-//////////////////////////////////////////////////
-/// creating axes
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .tickSize(0)
-    .tickPadding(6)
-    .orient("bottom");
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .innerTickSize(-width)
-    .outerTickSize(0)
-    .tickPadding(10)
-    .orient("left");
-    
-//// Appending axes
-svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
-      
-svg.append("g")
-    .attr("class", "y axis")
-    .attr("transform", "translate("+margin.left+",0)")
-    .call(yAxis)
-  .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Miles");    
-  
- 
- 
-    
-////////////////////////////////////////////////////////
-//
-//  WEEKLY SUMMARY bars by zone 
-////////////////////////////////////////////////////////
-
-
-var recoveryW = JSON.parse('{{ recoveryW_json | escapejs }}');
-var easyW = JSON.parse('{{ easyW_json | escapejs }}');
-var staminaW = JSON.parse('{{ staminaW_json | escapejs }}');
-var impulseW = JSON.parse('{{ impulseW_json | escapejs }}');
-
-//var athleteId = {{ athleteId }}
-
-var recW = new Array();
-var eaW = new Array();
-var stamW = new Array();
-var impW = new Array();
-
-for (key in recoveryW) { recW.push(recoveryW[key]) };
-for (key in easyW) { eaW.push(easyW[key]) };
-for (key in staminaW) { stamW.push(staminaW[key]) };
-for (key in impulseW) { impW.push(impulseW[key]) };
-
-rawDataW = new Array(recW, eaW, stamW, impW);
-
-var n = rawDataW.length, // number of layers
-    m = rawDataW[0].length, // number of samples per layer
-    stackW = d3.layout.stack(),
-    layersW = stackW(rawDataW),
-    yGroupMaxW = d3.max(layersW, function(layerW) { return d3.max(layerW, function(d) { return d.y; }); }),
-    yStackMaxW = d3.max(layersW, function(layerW) { return d3.max(layerW, function(d) { return d.y0 + d.y; }); });
-
-var marginW = margin //{top: 20, right: 10, bottom: 20, left: 12},
-    widthW = 900 - marginW.left - marginW.right,
-    heightW = 150 - marginW.top - marginW.bottom;
-
-//var jsDay = 86400000;    //Each day is 86400 seconds
-//var now = Date.now();
-
-//mExtent = [(now-jsDay*30),now];
-
-//oExtentW = [ d3.min(layersW, function(layerW) { return d3.min(layerW, function(d) { return d.x; }) - jsDay; }), now + jsDay*7];
-
-oExtentW = [ now - jsDay*365, now + jsDay*7];
-
-var xW = d3.time.scale()  // x scale
-    .domain(oExtentW)
-    .range([marginW.left, widthW]);
-
-var yW = d3.scale.linear()   // y scale
-    .domain([0, yStackMaxW])
-    .range([heightW, 0]);
- 
-/// creating svg for bars by zone
-var svgW = d3.select("#barsW").append("svg")
-    .attr("width", widthW + marginW.left + marginW.right)
-    .attr("height", heightW + marginW.top + marginW.bottom)
-  .append("g")
-    .attr("transform", "translate(" + marginW.left + "," + marginW.top + ")"); 
-    
-   
-// making clipPath
-svgW.append("defs").append("clipPath")
-    .attr("id", "clip")
-  .append("rect")
-    .attr("x", marginW.left)
-    .attr("width", widthW-marginW.left)
-    .attr("height", heightW);
-        
-    
-//////////////////////////////////////////////////
-/// creating axes
-var xAxisW = d3.svg.axis()
-    .scale(xW)
-    .tickSize(0)
-    .tickPadding(6)
-    .orient("bottom");
-
-var yAxisW = d3.svg.axis()
-    .scale(yW)
-    .innerTickSize(-widthW)
-    .outerTickSize(0)
-    .tickPadding(10)
-    .orient("left");
-    
-//// Appending axes
-svgW.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + heightW + ")")
-    .call(xAxisW);
-      
-
-svgW.append("g")
-    .attr("class", "y axis")
-    .attr("transform", "translate("+marginW.left+",0)")
-    .call(yAxisW)
-  .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 6)
-    .attr("dy", ".71em")
-    .style("text-anchor", "end")
-    .text("Miles");  
-
-
-/////////////////////////////////
-// zoom
-/////////////////////////////////
-  
-  
-var minDate = oExtent[0];
-var maxDate = oExtent[1];
-  
-var zoom = d3.behavior.zoom()
-    .x(x)
-    .on('zoom', function() {
-        if (x.domain()[0] < minDate) {
-	        var xT = zoom.translate()[0] - x(minDate) + x.range()[0];
-                zoom.translate([xT, 0]);
-            } 
-        else if (x.domain()[1] > maxDate) {
-	        var xT = zoom.translate()[0] - x(maxDate) + x.range()[1];
-                zoom.translate([xT, 0]);
-            }
-        redrawChart();
-        updateViewportFromChart();
-    });
-
-function updateViewportFromChart() {
-    if ((x.domain()[0] <= minDate) && (x.domain()[1] >= maxDate)) {
-        brush.extent(oExtent);
-    }
-    else {
-        brush.extent(x.domain());
-    }
-    svgW.select('.brush').call(brush);
-}
-
-function updateZoomFromChart() {
-    zoom.x(x);   
-    var fullDomain = maxDate - minDate,
-        currentDomain = x.domain()[1] - x.domain()[0];
-
-    var minScale = currentDomain / fullDomain,
-        maxScale = minScale * 20;
-    zoom.scaleExtent([minScale, maxScale]);
-}
-
-// Placement of this pane interacts with tooltips. putting it up here lets tooltips come through.
-svg.append("rect")
-    .attr("class", "pane")
-    .attr("width", width)
-    .attr("height", height)
-    .call(zoom); 
-
-
-/////////////////////////////////////////////////////////     
-// adding brush
-////////////////////////////////////////////////
-
-var brush = d3.svg.brush()
-    .x(xW)
-    .on("brush", function() {
-        x.domain(brush.extent()); // updating domain to reflect brush
-        redrawChart();
-        })
-    .on("brushend", function () {
-        updateZoomFromChart();
-    });
-
-function getY() {
-    if (barStacked) {
-        return function(d) { return y(d.y0 + d.y); } }
-    else { return function(d) { return y(d.y); } }   };
-
-function getX() {
-    if (barStacked) {
-        return function(d) { return x(d.x); } }
-    else { return function(d, i, j) { return x(d.x) + getBarW() / n * j; } }  };
-
-function getW() {
-    if (barStacked) {
-        return getBarW() }
-    else { return getBarW() / n }  };
-    
-function getBarW() { 
-    var currentDomain = x.domain()[1] - x.domain()[0]; // calculating bar width
-    var jsDay = 86400000;
-    var days = currentDomain / (jsDay+1);
-    bwt = (width / days) -2;
-    return bwt };
-
-function redrawChart() {          // drawing up new graphs
-    
-    layer.selectAll(".zoneRect")
-        .data(function(d) { return d; })
-        .transition()
-        .duration(1)  // short transition
-        .attr("x", getX())
-        .attr("y", getY())   
-        .attr("width", getW())
-        .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); } );
-     
-    svg.select('.x.axis')
-    .call(xAxis);      
-};
-  
-   
-d3.select("#reset")             // Resetting to original view
-    .on("click", function() {  
-        brush.extent(oExtent);  // FINALLY IT WORKS       
-        svg.select('.brush')
-        .call(brush);      
-        redrawChart();
-    } );  
-   
-var goMonth = function() {  
-        brush.extent(mExtent);     
-        x.domain(mExtent);  
-        //svg.select('.brush')
-        //.call(brush);   
-        svgW.select('.brush')
-        .call(brush);  
-        redrawChart();
-        updateViewportFromChart();
-        updateZoomFromChart();
-          }   
-    
-d3.select("#month")             // setting to month
-    .on("click", goMonth);     
-
-// calculating bar widths      
- /*
-var threemExtent = [now-jsDay*30*3, now];          
-var xMax = now;
-var xMin = threemExtent[0];   // change this when changing initial zoom
-var xDom = xMax - xMin
-var days = xDom / jsDay;
-var bwt = width / days;
-*/
-
-var currentDomain = mExtent[1] - mExtent[0] // change this when changing init
-var days = currentDomain / jsDay
-var bwt = width / days
-
-var barWidth = bwt-2;
-
-
-
-/////////////////////////////////////////////////////////////////
-/// appending layers etc
-
-var layer = svg.selectAll(".layer")
-    .data(layers)
-  .enter().append("g")
-    .attr("class", "layer")
-    .attr("clip-path", "url(#clip)")
-    .style("fill", function(d, i) { return color(i); });
-
-var rect = layer.selectAll("rect")
-    .data(function(d) { return d; })
-  .enter().append("rect")
-    .attr("class", "zoneRect")
-    .attr("x", function(d) { return x(d.x); })
-    .attr("y", height)
-    .attr("width", getBarW())
-    .attr("height", 0);
-
-rect.transition()   // initial transition into place
-    .delay(function(d, i) { return i * 10; })
-    .attr("y", function(d) { return y(d.y0 + d.y); })
-    .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); });
-
-
-/////////////////////////////////////////////////////////////////
-/// appending layers etc WEEKLY
-
-
-weekWidth = (widthW / 53 ) - 2  // this gotta be updated when barW scale is set
-
-function makeBarsW() {
-    var layerW = svgW.selectAll(".layer")
-        .data(layersW)
-      .enter().append("g")
-        .attr("class", "layer")
-        .attr("clip-path", "url(#clip)")
-        .style("fill", function(d, i) { return color(i); });
-
-    var rectW = layerW.selectAll("rect")
-        .data(function(d) { return d; })
-      .enter().append("rect")
-        .attr("class", "zoneRect")
-        .attr("x", function(d) { return xW(d.x); })
-        .attr("y", heightW)
-        .attr("width", weekWidth)
-        .attr("height", 0);
-
-    rectW.transition()   // initial transition into place
-        .delay(function(d, i) { return i * 10; })
-        .attr("y", function(d) { return yW(d.y0 + d.y); })
-        .attr("height", function(d) { return yW(d.y0) - yW(d.y0 + d.y); });
-    };
-makeBarsW();   
-
-
-////////////////////////////////////////////
-// Transition logic
-////////////////////////////////////////////
-
-d3.selectAll("input").on("change", change); // radio buttons cued to change when pressed
-
-function change() {
-  if (this.value === "grouped") transitionGrouped() 
-  else transitionStacked();
-}
-
-function transitionGrouped() {    // transition into groups
-  y.domain([0, yGroupMax]);
-
-  rect.transition()
-      .duration(500)
-      .delay(function(d, i) { return i * 10; })
-      .attr("x", function(d, i, j) { return x(d.x) + getBarW() / n * j; })
-      .attr("width", getBarW() / n)
-    .transition()
-      .attr("y", function(d) { return y(d.y); })
-      .attr("height", function(d) { return height - y(d.y); });
-      
-   svg.select('.y.axis')
-    .call(yAxis);
-    
-   barStacked = !barStacked;
-}
-
-function transitionStacked() {    // transition into stacks
-  y.domain([0, yStackMax]);
-
-  rect.transition()
-      .duration(500)
-      .delay(function(d, i) { return i * 10; })
-      .attr("y", function(d) { return y(d.y0 + d.y); })
-      .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); })
-    .transition()
-      .attr("x", function(d) { return x(d.x); })
-      .attr("width", getBarW());
-      
-  svg.select('.y.axis')
-    .call(yAxis);
-    
-  barStacked = !barStacked;
-}
- 
-
- 
-/////////////////////////////////////////////////////
-// tooltip for zone rects
-// 
-
-var jsHour = jsDay / 24
-
-svg.selectAll(".zoneRect")
-    .on("mouseover", function(d) {
-
-        thisTime = new Date(d.x)
-        svg.selectAll(".zoneRect")
-            .filter(function(d) {
-                if (format(new Date(d.x)) == format(thisTime)) {return true}
-                })
-                .classed("highlight", true)
-                //.style("fill", "black");
-                
-        var x = d3.event.pageX;
-        var y = d3.event.pageY;
-        text = new Date(d.x);
-        d3.select("#tooltip")
-		    .style("left", x + "px")
-		    .style("top", y + "px")
-		    .style("opacity", 1)
-		    .text(text);
-		    
-		    
-        // highlighting fit bars        
-		var elemented = document.getElementById(String(thisTime.getTime()));
-		d3.select(elemented)
-		    .style("stroke", "black")
-		    .attr("class", "hlfl")
-                })
-               
-    .on("mouseout", function(d) {
-    
-            thisTime = new Date(d.x)
-            svg.selectAll(".zoneRect")
-            .classed("highlight", false);
-            //.style("fill", ptColor);
-            
-            d3.select("#tooltip")
-                .style("opacity", 0);
-            d3.selectAll(".hlfl")
-                .style("stroke", dateColorScale(thisTime.getTime()))
-         })
-         
-    .on("click", function(d) {
-            var activityId = data3[format(new Date(d.x))].id
-            var url = "http://127.0.0.1:8000/"+String(athleteId)+"/run_detail/"
-            //var url = "http://reddlee.pythonanywhere.com/"
-            url += activityId
-            window.location = url
-     }          
-         );
- 
-
-    
-// initializing at one month
-goMonth(); 
-
-svgW.append("g")                 // adding brush to svgW
-    .attr("class", "brush")
-    .call(brush)
-    .selectAll("rect")
-    .attr("height", heightW)
-    .style("opacity", .15);
-    
-    
-    
-    
-///////////////////////////////////////////////////
-//
-//  Fitlines
-//
-////////////////////////////////////////////////////
-
-//var fitlineTest = JSON.parse('{{testLine | escapejs}}');
-var fitlinesAll = JSON.parse('{{fitlinesAll | escapejs}}');
-
-//var tf = fitlinesAll.filter(function(x) {return x.date==1459353123000})
-//var datesList = JSON.parse('{{datesList | escapejs}}'); dates don't seem to match up. bc one includes hour-minute-sec and other doesn't? investigate
-
-var wF = 600;
-var hF = 600;
-
-
-var svgF = d3.select("#fitlines")
-			.append("svg")
-			.attr("width", wF + margin.left + margin.right)
-            .attr("height", hF + margin.top + margin.bottom)
-          .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
- 
-// making clipPath
-svgF.append("defs").append("clipPath")
-    .attr("id", "clipFl")
-  .append("rect")
-    .attr("x", margin.left)
-    .attr("width", wF-margin.left)
-    .attr("height", hF);	
-    
- 
-// making list of dates. 
-
-dl = new Array();
-for (i=0; i<fitlinesAll.length; i++) {
-    
-    // formatting to date object then back to milliseconds to get rid of hour-min info and standardize with dates used in other parts of page.     
-    //date = format.parse(format(new Date(fitlinesAll[i].date))).getTime()
-    //console.log(date)
-    //console.log(fitlinesAll[i].date)
-    dl.push(fitlinesAll[i].date)
-    };
-
-function onlyUnique(value, index, self) { 
-    return self.indexOf(value) === index;
-};
-
-var dl = dl.filter(onlyUnique); 
-dl.sort(); 
- 
-// scales and axes
-   
-var hrScale2 = d3.scale.linear()
-            .domain([60, 200])
-            .range([margin.left, wF]);   
-                  
-var hrAxis2 = d3.svg.axis()
-            .innerTickSize(-hF)
-            .scale(hrScale2)
-            .orient("bottom")
-            .ticks(10);            
-            
-var speedScale2 = d3.scale.linear()
-            .domain([-0.1, 7])
-            .range([hF, 0]);
-                        
-var speedAxis2 = d3.svg.axis()
-            .innerTickSize(-wF)
-            .scale(speedScale2)
-            .orient("left");   
-            
-var dateColorScale = d3.scale.linear()
-            .domain([d3.min(dl, function(d) {return d}), d3.max(dl, function(d) {return d})]) 
-            .range(['#fc8d59','#99d594']);
-
-var dateOpacityScale = d3.scale.linear()
-            .domain([dl[0], dl[dl.length-1]]) 
-            .range([0.0, 1.0]);
-            
-svgF.append("g")
-    .attr("class", "y axis")
-    .attr("transform", "translate("+margin.left+",0)")
-    .call(speedAxis2);
-                  
-svgF.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," +hF+ ")")
-            .call(hrAxis2);
-
-
-
-/////////////////////////////
-// zoom
-
-var hrExtent = hrScale2.domain()
-var speedExtent = speedScale2.domain()
-  
-var zoomFl = d3.behavior.zoom()
-    .x(hrScale2)
-    .y(speedScale2)
-    .on('zoom', function() {
-    
-        if (hrScale2.domain()[0] < hrExtent[0]) {
-	        var xT = zoom.translate()[0] - hrScale2(hrExtent[0]) + hrScale2.range()[0];
-                zoom.translate([xT, 0]);
-            } 
-        else if (hrScale2.domain()[1] > hrExtent[1]) {
-	        var xT = zoom.translate()[0] - hrScale2(hrExtent[1]) + hrScale2.range()[1];
-                zoom.translate([xT, 0]);
-            }
-        redrawChartFl();     
-    });
-
-// Placement of this pane interacts with tooltips. 
-
-svgF.append("rect")
-    .attr("class", "pane")
-    .attr("width", wF)
-    .attr("height", hF)
-    .call(zoomFl); 
-
-// lines, placing last to allow tooltips to come through
-
-function drawFitLines() {
-    for (i=0; i<dl.length; i++) {
-
-        var fitlineData = fitlinesAll.filter(function(x) {return x.date==dl[i]})
-        
-        var fl = d3.svg.line()  
-            .x(function(d) { return hrScale2(d.hr) } )
-            .y(function(d) { return speedScale2(d.avgSpeed) } );
-        
-        //var date = dl[i]
-        // formatting to date object then back to milliseconds to get rid of hour-min info and standardize with dates used in other parts of page.     
-        //var dateSimple = format.parse(format(new Date(dl[i]))).getTime()
-        //console.log(dateSimple)   
-           
-        var fitline = svgF.append("path")
-          .datum(fitlineData)
-          .attr("class", "fitLine")
-          .attr("id", dl[i] ) // this is a string, convert to Number then to date for use
-          .attr("clip-path", "url(#clipFl)")
-          .attr("d", fl)
-          .style("fill", "none")
-          .style("stroke-width", 3)
-          .style("stroke", dateColorScale(dl[i]))
-          //.text(dl[i])
-          .on("mouseover", function (d) {    
-          
-                var date = format(new Date(Number(this.id)))      
-                                              
-          		d3.select(this)                          
-                	.style("stroke-width",'6px') 
-                	.style("stroke", "black")
-            	
-                var x = d3.event.pageX;
-                var y = d3.event.pageY;
-                d3.select("#tooltipFl")
-				    .style("left", x + "px")
-				    .style("top", y + "px")
-				    .style("opacity", 1)
-				    .text(date);           	
-            	
-            	
-            	})
-          .on("mouseout", function (d) {                                  
-          		d3.select(this)                          
-                	.style("stroke-width",'3px') 
-                	.style("stroke", dateColorScale(this.id))
-            	
-            	d3.select("#tooltipFl")
-				    .style("opacity", 0)
-            	
-            	
-            	});
-    };
-};
-drawFitLines() 
-
-///////////////////////////////////////////
-// brush for fitlines. not actually using it, want zoom instead
-var brushFl = d3.svg.brush()
-    .x(hrScale2)
-    .y(speedScale2)
-    .on("brush", function() {  })
-    .on("brushend", function() {
-        var extent = brushFl.extent() // this extent is TWO DIMENSIONAL
-        var yExtent = [extent[0][1], extent[1][1]]
-        var xExtent = [extent[0][0], extent[1][0]]
-        
-        hrScale2.domain(xExtent); 
-        speedScale2.domain(yExtent); 
-        
-        redrawChartFl()
-    
-    });
-    
-function redrawChartFl() {          // drawing up new graphs  
-  
-    svgF.selectAll(".fitLine")
-    .remove();
-    
-    svgF.selectAll(".hlfl")
-    .remove();
-        
-    drawFitLines(); 
-     
-    svgF.select('.x.axis')
-    .call(hrAxis2);    
-    
-    svgF.select('.y.axis')
-    .call(speedAxis2);   
-    
-    d3.selectAll(".brushFl")      // clearing brush from all graphs
-      .call(brushFl.clear());
-};   
-
-/*
-svgF.append("g")                 // adding brush to svgF
-    .attr("class", "brushFl")
-    .call(brushFl)
-    .selectAll("rect")
-    .attr("height", hF)
-    //.attr("width", 10)
-    .style("opacity", .15);
-*/
-
-
-
-{% endblock %}
+addLegend();
 
     
      
 </script>
 
-</html>
+{% endblock %}
+

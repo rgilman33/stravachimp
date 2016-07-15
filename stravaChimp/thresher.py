@@ -207,10 +207,19 @@ def getRollingSummaryDf(summaryDf):
     rollingRecL = [] 
     rollingEasyL = []
     rollingStaminaL = []  
+    rollingClimbL = []
+    rollingTimeL = []
+    
     for i in range(len(fullSummary)):
         aWeekPrevious = fullSummary.date[i] - datetime.timedelta(days=7)
         previous7Days = fullSummary[(fullSummary.date > aWeekPrevious) & (fullSummary.date <= fullSummary.date[i])]
         
+        rollingClimb = np.sum(previous7Days.climb)
+        rollingClimbL.append(rollingClimb)
+
+        rollingTime = np.sum(previous7Days.totalTime)
+        rollingTimeL.append(rollingTime)
+
         rollingDist = np.sum(previous7Days.totalDist)
         rollingDistL.append(rollingDist)
 
@@ -226,8 +235,12 @@ def getRollingSummaryDf(summaryDf):
         rollingStamina = np.sum(previous7Days.stamina)
         rollingStaminaL.append(rollingStamina)
 
-    rolling = DataFrame({'date':fullSummary.date, 'rollDist':rollingDistL, 'rollImp':rollingImpulseL, 'rollRec':rollingRecL, 'rollEasy':rollingEasyL, 'rollStam':rollingStaminaL})
-    
+    rolling = DataFrame({'date':fullSummary.date, 'rollTime':rollingTimeL, 'rollDist':rollingDistL, 'rollImp':rollingImpulseL, 'rollRec':rollingRecL, 'rollEasy':rollingEasyL, 'rollStam':rollingStaminaL, 'rollClimb': rollingClimbL}) 
+
+    #rolling = rolling.fillna(10.0)
+
+    #rolling['efficiency'] = (rolling.rollDist - rolling.rollStam) / (rollling.rollDist)
+
     return rolling
 
 # making json for testing purposes
@@ -458,6 +471,33 @@ def getFitlineLws(df):
     flLws['date'] = df.date[df.index[0]]
     #print(flLws)
     
+    return flLws
+  
+# takes in a two column df and outputs a two-columns df smoothed for lowess
+# input df must be of the form x, y
+# frac (float) = the percent of data used when estimating each y value
+# it (int) = number of residual based reweightings to perform (?)
+
+def makeLws(df, frac=.66, it=3):  
+    col1 = df.columns[0]
+    col2 = df.columns[1]
+
+    lowess = sm.nonparametric.lowess
+    #jitter = np.random.normal(0, .00001, len(df))
+    #df['speeds'] = df.speeds + jitter # bug in statsmodels, adding some jitter as workaround
+
+    lws = lowess(df[col2], df[col1], frac=frac, it=it)
+    lwsX = [z[0] for z in lws]
+    lwsY = [z[1] for z in lws]
+
+    flLws = pd.DataFrame({})
+    flLws[col1] = lwsX
+    flLws[col2] = lwsY
+    
+    #flLws['date'] = df.date[df.index[0]]
+    #print(flLws)
+    
+    print flLws
     return flLws
     
 """
